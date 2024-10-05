@@ -74,9 +74,9 @@ jobs:
           HOSTNAME: ${{ vars.SSH_HOST }}
           USER_NAME: ${{ vars.USER_NAME }}
         run: |
-          echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
+          echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
           echo "user@host ${USER_NAME}@${HOSTNAME}"
-          ssh -i private_key.pem ${USER_NAME}@${HOSTNAME} '
+          ssh -o "StrictHostKeyChecking no" -i private_key.pem ${USER_NAME}@${HOSTNAME} '
 
               # Now we have got the access of EC2 and we will start the deploy .
               docker-compose up
