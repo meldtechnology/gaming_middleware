@@ -11,6 +11,6 @@ RUN MKDIR -p ~/.m2/
 # Set the working directory to /app
 WORKDIR /app
 # Copy the fat jar into the work directory of the container
-COPY build/libs/Authorizer-Service-0.0.5.jar /app/auth-service.jar
+COPY build/libs/middleware-service-1.0.0.jar /app/middleware-service.jar
 #execute the application
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","auth-service.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","middleware-service.jar"]
