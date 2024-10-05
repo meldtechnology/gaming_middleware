@@ -35,6 +35,8 @@ jobs:
                 "username": "${{ secrets.USER_READ }}",
                 "password": "${{ secrets.TOKEN_READ }}"
             }]
+      - name: Server.xml
+        run: cat /home/runner/.m2/settings.xml
 
       # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
       # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
