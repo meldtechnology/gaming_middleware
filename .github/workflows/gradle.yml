@@ -11,16 +11,14 @@ on:
   push:
     branches: [ "main" ]
 
-  env:
-    BASE-IMAGE: josleke/middleware-service
-    TAG-RELEASE: 2024.1.0
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      BASE-IMAGE: josleke/middleware-service
+      TAG-RELEASE: 2024.1.0
 
     steps:
       - uses: actions/checkout@v4
