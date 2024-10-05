@@ -11,7 +11,7 @@ import org.meldtech.platform.model.api.request.PasswordRestRecord;
 import org.meldtech.platform.model.api.request.UserRecord;
 import org.meldtech.platform.model.api.response.FullUserProfileRecord;
 import org.meldtech.platform.model.dto.UploadFileRequest;
-import org.meldtech.platform.web.config.authorizer.AuthorizerHandler;
+import org.meldtech.platform.web.authorizer.AuthorizerHandler;
 import org.meldtech.platform.model.dto.OAuth2RegisteredClientRecord;
 import org.meldtech.platform.web.roles.RoleHandler;
 import org.meldtech.platform.web.users.UserProfileHandler;
