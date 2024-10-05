@@ -76,5 +76,5 @@ jobs:
           aws-region: eu-west-1
 
       - name: START Docker Service
-        run: |
+        script: |
             docker-compose up
