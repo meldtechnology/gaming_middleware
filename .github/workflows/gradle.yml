@@ -37,9 +37,6 @@ jobs:
                 "password": "${{ secrets.TOKEN_READ }}"
             }]
 
-      - name: Server.xml
-        run: cat /home/runner/.m2/settings.xml
-
       # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
       # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
       - name: Setup Gradle
@@ -69,3 +66,14 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Deploy to AWS - EC2
+        id: deploy
+        uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.1
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_default_region: eu-west-1
+          aws_elb_app_port: 9100 # This should match the docker exposed port. Defaults to 3000.
+        run: |
+          docker-compose up
