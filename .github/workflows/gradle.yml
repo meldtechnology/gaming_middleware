@@ -69,12 +69,11 @@ jobs:
 
       - name: Deploy to AWS - EC2
         id: deploy
-        uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: eu-west-1
-          aws_elb_app_port: 9100 # This should match the docker exposed port. Defaults to 3000.
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
 
       - name: START Docker Service
         run: |
