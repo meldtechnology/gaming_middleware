@@ -26,6 +26,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Maven Server Settings
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: | 
+             [{
+                id: "GitHubPackages", 
+                username: ${{ secrets.USER_READ }}, 
+                password: ${{ secrets.TOKEN_READ }}
+            }]
+
+
       # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
       # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
       - name: Setup Gradle
