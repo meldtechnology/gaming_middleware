@@ -6,8 +6,6 @@ VOLUME /tmp
 RUN apk update && apk upgrade
 #Remove unused packages and the cache- /etc/cache/apk for apk, and /var/cache/yum for yum package managers
 RUN apk cache -v sync
-
-RUN MKDIR -p ~/.m2/
 # Set the working directory to /app
 WORKDIR /app
 # Copy the fat jar into the work directory of the container
