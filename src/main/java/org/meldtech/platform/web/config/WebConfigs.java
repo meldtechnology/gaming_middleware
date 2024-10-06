@@ -169,12 +169,19 @@ public class WebConfigs {
                             @Schema( implementation = FullUserProfileRecord.class)))
                     )
             ),
+            @RouterOperation(path = USER_PROFILE_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserMetric",
+                    operation = @Operation(operationId = "getUserMetric", tags = "User Profiles API",
+                            description = "Get User Metrics", summary = "Get User Metrics"
+                    )
+            ),
     })
     public RouterFunction<ServerResponse> profileEndpointHandler(UserProfileHandler handler) {
         return route()
                 .GET(USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON), handler::getProfiles)
                 .GET(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON), handler::getUserProfile)
                 .GET(USER_PROFILE_BY_ID, accept(MediaType.APPLICATION_JSON), handler::getUserProfileByAdmin)
+                .GET(USER_PROFILE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getUserMetric)
                 .POST(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::addUserProfile)
                 .PUT(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)

@@ -18,7 +18,7 @@ jobs:
       contents: read
     env:
       BASE-IMAGE: josleke/middleware-service
-      RELEASE-TAG: 2024.1.1
+      RELEASE-TAG: 2024.2.1
 
     steps:
       - uses: actions/checkout@v4

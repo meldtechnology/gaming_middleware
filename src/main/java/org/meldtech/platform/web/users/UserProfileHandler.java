@@ -31,7 +31,7 @@ public class UserProfileHandler {
 
     public Mono<ServerResponse> getProfiles(ServerRequest request)  {
         log.info("[{}] Get user profiles Requested", request.headers().firstHeader(X_FORWARD_FOR));
-        return buildServerResponse(userProfileService.getUserProfiles(reportSettings(request)));
+        return getOrSearchProfiles(request);
     }
 
     public Mono<ServerResponse> getUserProfile(ServerRequest request)  {
@@ -75,5 +75,16 @@ public class UserProfileHandler {
                         .flatMap(userProfileRecord -> userProfileService.updateUserProfile(
                                 RequestBodyHelper.reconstruct(publicId, userProfileRecord))) )
                 .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> getUserMetric(ServerRequest request)  {
+        log.info("[{}] Get user Metrics By Admin Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(userProfileService.getUserMetrics());
+    }
+
+    private Mono<ServerResponse> getOrSearchProfiles(ServerRequest request) {
+        return request.queryParam("search").isPresent() ?
+                buildServerResponse(userProfileService.searchByValue(reportSettings(request))) :
+                buildServerResponse(userProfileService.getUserProfiles(reportSettings(request)));
     }
 }

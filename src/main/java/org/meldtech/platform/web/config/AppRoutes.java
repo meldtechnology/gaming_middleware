@@ -16,6 +16,7 @@ public interface AppRoutes {
 
         String USER_PROFILE_BASE = USER_BASE + "/profiles";
         String USER_PROFILE_BY_ID = USER_BASE + "/profiles/{publicId}";
+        String USER_PROFILE_METRIC = USER_ADMIN_BASE + "/metrics";
 
         String USER_SIGN_UP = USER_BASE + "/sign-up";
         String USER_RESEND_OTP = USER_BASE + "/{email}/send/otp";
