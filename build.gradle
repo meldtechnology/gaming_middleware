@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.meld-tech.platform'
-version = '1.1.0'
+version = '2024.2.2'
 
 java {
     toolchain {
@@ -40,7 +40,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-    implementation 'org.meld-tech.platform:user-service-lib:0.0.5'
+    implementation 'org.meld-tech.platform:user-service-lib:2024.1.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     // Validation
     implementation "javax.validation:validation-api:2.0.1.Final"

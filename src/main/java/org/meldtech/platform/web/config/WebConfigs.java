@@ -154,14 +154,6 @@ public class WebConfigs {
                             parameters = {@Parameter(in = ParameterIn.PATH, name = "publicId")})
             ),
             @RouterOperation(path = USER_PROFILE_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
-                    method = RequestMethod.POST, beanClass = UserProfileHandler.class, beanMethod = "addUserProfile",
-                    operation = @Operation(operationId = "addUserProfile", tags = "User Profiles API",
-                            description = "Add a New User Profile", summary = "Add a New User Profile",
-                            requestBody = @RequestBody(content = @Content(schema =
-                            @Schema( implementation = FullUserProfileRecord.class)))
-                    )
-            ),
-            @RouterOperation(path = USER_PROFILE_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "editUserProfile",
                     operation = @Operation(operationId = "editUserProfile", tags = "User Profiles API",
                             description = "Update User Profile Details", summary = "Update User Profile Details",
@@ -182,8 +174,6 @@ public class WebConfigs {
                 .GET(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON), handler::getUserProfile)
                 .GET(USER_PROFILE_BY_ID, accept(MediaType.APPLICATION_JSON), handler::getUserProfileByAdmin)
                 .GET(USER_PROFILE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getUserMetric)
-                .POST(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)
-                        .and(contentType(MediaType.APPLICATION_JSON)), handler::addUserProfile)
                 .PUT(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfile)
                 .build();

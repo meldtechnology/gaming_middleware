@@ -51,19 +51,6 @@ public class UserProfileHandler {
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
-    public Mono<ServerResponse> addUserProfile(ServerRequest request)  {
-        Mono<FullUserProfileRecord> profileRecordMono = request.bodyToMono(FullUserProfileRecord.class)
-                .doOnNext(customValidator::validateEntries);
-        Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
-        log.info("[{}] Create new user profile Requested", request.headers().firstHeader(X_FORWARD_FOR));
-        return jwtAuthToken
-                .map(ApiResponse::getPublicIdFromToken)
-                .map(publicId -> profileRecordMono
-                        .flatMap(userProfileRecord -> userProfileService.createUserProfile(
-                                RequestBodyHelper.reconstruct(publicId, userProfileRecord))) )
-                .flatMap(ApiResponse::buildServerResponse);
-    }
-
     public Mono<ServerResponse> editUserProfile(ServerRequest request)  {
         Mono<FullUserProfileRecord> profileRecordMono = request.bodyToMono(FullUserProfileRecord.class)
                 .doOnNext(customValidator::validateEntries);
