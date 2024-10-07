@@ -1,8 +1,10 @@
 package org.meldtech.platform.web.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -37,7 +39,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
-@Tag(name="OAuth2 Client Setting API", description = "OAuth2 Client API")
+@OpenAPIDefinition(info = @Info(title = "Meld Technologies Middleware Documentation", version = "1.0", description = "Meld-Tech Middleware APIs"))
 public class WebConfigs {
 
     @Bean
