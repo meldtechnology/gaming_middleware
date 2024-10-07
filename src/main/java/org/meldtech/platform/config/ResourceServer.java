@@ -5,6 +5,7 @@ import org.meldtech.platform.config.helper.CombinedClaimConverter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -26,14 +27,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceServer {
     private final CombinedClaimConverter converter;
+    private final List<CorsConfiguration> corsConfigurations;
     @Bean
     public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(authorizeExchangeSpec ->
                         authorizeExchangeSpec
-                                .pathMatchers(AUTH_WHITELIST)
-                                .permitAll()
+                                .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                                .pathMatchers(AUTH_WHITELIST).permitAll()
                                 .anyExchange()
                                 .authenticated()
                 )
