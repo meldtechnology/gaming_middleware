@@ -13,17 +13,23 @@ public interface AppRoutes {
 
         String USER_ADMIN_BASE =  USER_BASE + "/admin";
         String USER_PROFILE_ADMIN_BASE =  USER_ADMIN_BASE + "/profiles";
+        String EDIT_USER_PROFILE_ADMIN_BASE =  USER_ADMIN_BASE + "/profiles/{publicId}";
+        String USER_PROFILE_METRIC = USER_ADMIN_BASE + "/metrics";
+        String USER_SIGN_UP = USER_ADMIN_BASE + "/sign-up";
+        String USER_CHANGE_PASSWORD_BY_ADMIN = USER_ADMIN_BASE + "/password/{publicId}";
+        String CHANGE_USER_ROLE_BY_ADMIN = USER_ADMIN_BASE + "/{publicId}/role/{role}";
+        String USER_DISABLE = USER_ADMIN_BASE + "/de-activate/{publicId}";
+        String USER_ENABLE = USER_ADMIN_BASE + "/activate/{publicId}";
 
         String USER_PROFILE_BASE = USER_BASE + "/profiles";
         String USER_PROFILE_BY_ID = USER_BASE + "/profiles/{publicId}";
-        String USER_PROFILE_METRIC = USER_ADMIN_BASE + "/metrics";
 
-        String USER_SIGN_UP = USER_BASE + "/sign-up";
-        String USER_RESEND_OTP = USER_BASE + "/{email}/send/otp";
+        String USER_RESEND_OTP = USER_BASE + "/public/{email}/send/otp";
         String USER_VERIFY_OTP = USER_BASE + "/verify/otp/{otp}";
-        String USER_CHANGE_PASSWORD_PUBLIC_ID = USER_BASE + "/public/{email}/password";
+        String USER_REQUEST_CHANGE_PASSWORD = USER_BASE + "/public/{email}/password/reset";
         String USER_CHANGE_PASSWORD = USER_BASE + "/password";
-        String USER_DISABLE = USER_BASE + "/de-activate/{publicId}";
+        String USER_CHANGE_PASSWORD_PUBLIC = USER_BASE + "/public/password/{otp}";
+
     }
 
     interface Role {

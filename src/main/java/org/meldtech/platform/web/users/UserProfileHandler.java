@@ -30,13 +30,13 @@ public class UserProfileHandler {
 
 
     public Mono<ServerResponse> getProfiles(ServerRequest request)  {
-        log.info("[{}] Get user profiles Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        log.info("Get user profiles Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return getOrSearchProfiles(request);
     }
 
     public Mono<ServerResponse> getUserProfile(ServerRequest request)  {
         Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
-        log.info("[{}] Get user profile Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        log.info("Get user profile Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return jwtAuthToken
                 .map(ApiResponse::getPublicIdFromToken)
                 .map(userProfileService::getUserProfile)
@@ -45,7 +45,7 @@ public class UserProfileHandler {
 
     public Mono<ServerResponse> getUserProfileByAdmin(ServerRequest request)  {
         String userPublicId = request.pathVariable("publicId");
-        log.info("[{}] Get user profile By Admin Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        log.info("Get user profile By Admin Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return Mono.just(userPublicId)
                 .map(userProfileService::getUserProfileByAdmin)
                 .flatMap(ApiResponse::buildServerResponse);
@@ -55,17 +55,35 @@ public class UserProfileHandler {
         Mono<FullUserProfileRecord> profileRecordMono = request.bodyToMono(FullUserProfileRecord.class)
                 .doOnNext(customValidator::validateEntries);
         Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
-        log.info("[{}] Edit user profile Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        log.info("Edit user profile Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return jwtAuthToken
                 .map(ApiResponse::getPublicIdFromToken)
                 .map(publicId -> profileRecordMono
                         .flatMap(userProfileRecord -> userProfileService.updateUserProfile(
-                                RequestBodyHelper.reconstruct(publicId, userProfileRecord))) )
+                                RequestBodyHelper.reconstruct(publicId, userProfileRecord), false)) )
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
+    public Mono<ServerResponse> editUserProfileByAdmin(ServerRequest request)  {
+        Mono<FullUserProfileRecord> profileRecordMono = request.bodyToMono(FullUserProfileRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        String publicId = request.pathVariable("publicId");
+        log.info("Admin Edit user profile Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return profileRecordMono
+                        .map(userProfileRecord -> userProfileService.updateUserProfile(
+                                RequestBodyHelper.reconstruct(publicId, userProfileRecord), true))
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> changeUserRole(ServerRequest request)  {
+        String userPublicId = request.pathVariable("publicId");
+        String role = request.pathVariable("role");
+        log.info("Get user Metrics By Admin Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(userProfileService.changePermission(userPublicId, role));
+    }
+
     public Mono<ServerResponse> getUserMetric(ServerRequest request)  {
-        log.info("[{}] Get user Metrics By Admin Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        log.info("Get user Metrics By Admin Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return buildServerResponse(userProfileService.getUserMetrics());
     }
 

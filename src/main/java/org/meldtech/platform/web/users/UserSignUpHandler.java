@@ -7,6 +7,7 @@ import org.meldtech.platform.config.CustomValidator;
 import org.meldtech.platform.model.api.ApiResponse;
 import org.meldtech.platform.model.api.request.PasswordRestRecord;
 import org.meldtech.platform.model.api.request.UserRecord;
+import org.meldtech.platform.model.constant.VerificationType;
 import org.meldtech.platform.model.dto.UploadFileRequest;
 import org.meldtech.platform.service.UserSignUpService;
 import org.meldtech.platform.service.cloudinary.MeldFileProcessor;
@@ -50,6 +51,16 @@ public class UserSignUpHandler {
         return buildServerResponse(userSignUpService.resetPasswordRequest(email, resetPasswordTemplate));
     }
 
+    public Mono<ServerResponse> changePasswordPublic(ServerRequest request)  {
+        Mono<PasswordRestRecord> passwordRecordMono = request.bodyToMono(PasswordRestRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        String otp = request.pathVariable("otp");
+        log.info("Change user password public Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return passwordRecordMono.map(passwordRestRecord ->
+                        userSignUpService.verifyPasswordResetOtp(otp, passwordRestRecord))
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
     public Mono<ServerResponse> changePassword(ServerRequest request)  {
         Mono<PasswordRestRecord> passwordRecordMono = request.bodyToMono(PasswordRestRecord.class)
                 .doOnNext(customValidator::validateEntries);
@@ -63,11 +74,21 @@ public class UserSignUpHandler {
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
+    public Mono<ServerResponse> changePasswordByAdmin(ServerRequest request)  {
+        Mono<PasswordRestRecord> passwordRecordMono = request.bodyToMono(PasswordRestRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        String publicId = request.pathVariable("publicId");
+        log.info("Admin change user password Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        return  passwordRecordMono.map(passwordRestRecord ->
+                        userSignUpService.changePassword(publicId, passwordRestRecord))
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
     public Mono<ServerResponse> resendOtp(ServerRequest request)  {
         String email = request.pathVariable("email");
         String username = request.queryParam("username").orElse(email);
         log.info("Resend OTP Requested ", request.headers().firstHeader(X_FORWARD_FOR), username);
-        return buildServerResponse(userSignUpService.resendOtp(username, email, otpTemplate));
+        return buildServerResponse(userSignUpService.resendOtp(username.trim(), email.trim(), otpTemplate));
     }
 
     public Mono<ServerResponse> verifyOtp(ServerRequest request)  {
@@ -78,8 +99,14 @@ public class UserSignUpHandler {
 
     public Mono<ServerResponse> disableUser(ServerRequest request)  {
         String publicId = request.pathVariable("publicId");
-        log.info("Disable user {} Requested", request.headers().firstHeader(X_FORWARD_FOR), publicId);
+        log.info("Disable user Requested", request.headers().firstHeader(X_FORWARD_FOR), publicId);
         return buildServerResponse(userSignUpService.deActivateUser(publicId));
+    }
+
+    public Mono<ServerResponse> reEnableUser(ServerRequest request)  {
+        String publicId = request.pathVariable("publicId");
+        log.info("Re-activate user Requested", request.headers().firstHeader(X_FORWARD_FOR), " ", publicId);
+        return buildServerResponse(userSignUpService.reActivateUser(publicId, otpTemplate, VerificationType.RE_ACTIVATE));
     }
 
 

@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.meldtech.platform.model.api.request.PasswordRestRecord;
 import org.meldtech.platform.model.api.request.UserRecord;
 import org.meldtech.platform.model.api.response.FullUserProfileRecord;
@@ -163,6 +162,23 @@ public class WebConfigs {
                             @Schema( implementation = FullUserProfileRecord.class)))
                     )
             ),
+            @RouterOperation(path = EDIT_USER_PROFILE_ADMIN_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "editUserProfileByAdmin",
+                    operation = @Operation(operationId = "editUserProfileByAdmin", tags = "User Profiles API",
+                            description = "Admin Update User Profile Details", summary = "Admin Update User Profile Details",
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = FullUserProfileRecord.class)))
+                    )
+            ),
+            @RouterOperation(path = CHANGE_USER_ROLE_BY_ADMIN, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "changeUserRole",
+                    operation = @Operation(operationId = "changeUserRole", tags = "User Profiles API",
+                            description = "Admin Update User Role", summary = "Admin Update User Role",
+                            parameters = {
+                            @Parameter(in = ParameterIn.PATH, name = "publicId"),
+                            @Parameter(in = ParameterIn.PATH, name = "role")
+                    })
+            ),
             @RouterOperation(path = USER_PROFILE_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserMetric",
                     operation = @Operation(operationId = "getUserMetric", tags = "User Profiles API",
@@ -178,6 +194,9 @@ public class WebConfigs {
                 .GET(USER_PROFILE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getUserMetric)
                 .PUT(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfile)
+                .PUT(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfileByAdmin)
+                .PUT(CHANGE_USER_ROLE_BY_ADMIN, accept(MediaType.APPLICATION_JSON), handler::changeUserRole)
                 .build();
     }
 
@@ -191,7 +210,7 @@ public class WebConfigs {
                                      @Parameter(in = ParameterIn.QUERY, name = "username"),
                     })
             ),
-            @RouterOperation(path = USER_CHANGE_PASSWORD_PUBLIC_ID, produces = { MediaType.APPLICATION_JSON_VALUE},
+            @RouterOperation(path = USER_REQUEST_CHANGE_PASSWORD, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserSignUpHandler.class, beanMethod = "resetUserPassword",
                     operation = @Operation(operationId = "resetUserPassword", tags = "User Account API",
                             description = "User Reset Password (public)", summary = "User Reset Password (public)",
@@ -214,6 +233,24 @@ public class WebConfigs {
                             @Schema( implementation = PasswordRestRecord.class)))
                     )
             ),
+            @RouterOperation(path = USER_CHANGE_PASSWORD_BY_ADMIN, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "changePasswordByAdmin",
+                    operation = @Operation(operationId = "changePasswordByAdmin", tags = "User Account API",
+                            description = "Admin Change User Password", summary = "Admin Change User Password",
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = PasswordRestRecord.class))),
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "publicId", required = true)}
+                    )
+            ),
+            @RouterOperation(path = USER_CHANGE_PASSWORD_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "changePasswordPublic",
+                    operation = @Operation(operationId = "changePasswordPublic", tags = "User Account API",
+                            description = "Change User Password", summary = "Change User Password",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "otp", required = true)},
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = PasswordRestRecord.class)))
+                    )
+            ),
             @RouterOperation(path = USER_VERIFY_OTP, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "verifyOtp",
                     operation = @Operation(operationId = "verifyOtp", tags = "User Account API",
@@ -225,6 +262,13 @@ public class WebConfigs {
                     method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "disableUser",
                     operation = @Operation(operationId = "disableUser", tags = "User Account API",
                             description = "De-Activate User", summary = "De-Activate User",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "publicId", required = true)}
+                    )
+            ),
+            @RouterOperation(path = USER_ENABLE, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "reEnableUser",
+                    operation = @Operation(operationId = "reEnableUser", tags = "User Account API",
+                            description = "Admin Activate User", summary = "Admin Activate User",
                             parameters = { @Parameter(in = ParameterIn.PATH, name = "publicId", required = true)}
                     )
             ),
@@ -240,12 +284,17 @@ public class WebConfigs {
     public RouterFunction<ServerResponse> userEndpointHandler(UserSignUpHandler handler) {
         return route()
                 .GET(USER_RESEND_OTP, accept(MediaType.APPLICATION_JSON), handler::resendOtp)
-                .GET(USER_CHANGE_PASSWORD_PUBLIC_ID, accept(MediaType.APPLICATION_JSON), handler::resetUserPassword)
+                .GET(USER_REQUEST_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON), handler::resetUserPassword)
                 .POST(USER_SIGN_UP, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::addNewUser)
                 .PUT(USER_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON)
-                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePassword).
-                PUT(USER_VERIFY_OTP, accept(MediaType.APPLICATION_JSON), handler::verifyOtp)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePassword)
+                .PUT(USER_CHANGE_PASSWORD_BY_ADMIN, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordByAdmin)
+                .PUT(USER_CHANGE_PASSWORD_PUBLIC, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublic)
+                .PUT(USER_ENABLE, accept(MediaType.APPLICATION_JSON), handler::reEnableUser)
+                .PUT(USER_VERIFY_OTP, accept(MediaType.APPLICATION_JSON), handler::verifyOtp)
                 .PUT(USER_DISABLE, accept(MediaType.APPLICATION_JSON), handler::disableUser)
                 .POST(DOCUMENT_UPLOAD, accept(MediaType.APPLICATION_JSON), handler::uploadDocument)
                 .build();
