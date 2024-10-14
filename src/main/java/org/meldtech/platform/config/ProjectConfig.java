@@ -1,5 +1,7 @@
 package org.meldtech.platform.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,7 @@ import java.util.List;
  * @Email: josleke@gmail.com, josiah.adetayo@meld-tech.com
  * @Date: 12/6/23
  */
+@Slf4j
 @EnableScheduling
 @Configuration
 public class ProjectConfig {
@@ -35,7 +38,7 @@ public class ProjectConfig {
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("content-length"));
         config.setMaxAge(3600L);
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

@@ -163,7 +163,7 @@ public class WebConfigs {
                     )
             ),
             @RouterOperation(path = EDIT_USER_PROFILE_ADMIN_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
-                    method = RequestMethod.POST, beanClass = UserProfileHandler.class, beanMethod = "editUserProfileByAdmin",
+                    method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "editUserProfileByAdmin",
                     operation = @Operation(operationId = "editUserProfileByAdmin", tags = "User Profiles API",
                             description = "Admin Update User Profile Details", summary = "Admin Update User Profile Details",
                             parameters = {@Parameter(in = ParameterIn.PATH, name = "publicId")},
@@ -195,7 +195,7 @@ public class WebConfigs {
                 .GET(USER_PROFILE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getUserMetric)
                 .PUT(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfile)
-                .POST(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
+                .PUT(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfileByAdmin)
                 .PUT(CHANGE_USER_ROLE_BY_ADMIN, accept(MediaType.APPLICATION_JSON), handler::changeUserRole)
                 .build();
