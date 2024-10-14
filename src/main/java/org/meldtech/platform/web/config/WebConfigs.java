@@ -166,6 +166,7 @@ public class WebConfigs {
                     method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "editUserProfileByAdmin",
                     operation = @Operation(operationId = "editUserProfileByAdmin", tags = "User Profiles API",
                             description = "Admin Update User Profile Details", summary = "Admin Update User Profile Details",
+                            parameters = {@Parameter(in = ParameterIn.PATH, name = "publicId")},
                             requestBody = @RequestBody(content = @Content(schema =
                             @Schema( implementation = FullUserProfileRecord.class)))
                     )
