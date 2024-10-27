@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.meld-tech.platform'
-version = '2024.3.4'
+version = '2024.4.0'
 
 java {
     toolchain {
@@ -27,6 +27,14 @@ repositories {
             basic(BasicAuthentication)
         }
     }
+
+    maven {
+        url 'https://maven.pkg.github.com/jintell/meld-repo'
+        name 'meld-document-services'
+        authentication {
+            basic(BasicAuthentication)
+        }
+    }
 }
 
 ext {
@@ -40,7 +48,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-    implementation 'org.meld-tech.platform:user-service-lib:2024.3.6'
+    // Meld-Tech Library
+    implementation 'org.meld-tech.platform:user-service-lib:2024.3.7'
+    implementation 'org.meld-tech.platform:document-service-lib:2024.0.1'
+    //Json Binder
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     // Validation
     implementation "javax.validation:validation-api:2.0.1.Final"
@@ -51,6 +62,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 dependencyManagement {

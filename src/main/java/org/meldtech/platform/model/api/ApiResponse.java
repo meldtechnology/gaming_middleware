@@ -1,5 +1,6 @@
 package org.meldtech.platform.model.api;
 
+import org.meldtech.platform.model.UserInfo;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -36,5 +37,16 @@ public class ApiResponse {
         return jwtToken.getTokenAttributes()
                 .getOrDefault("publicId", "")
                 .toString();
+    }
+
+    public static UserInfo getUserInfoFromToken(JwtAuthenticationToken jwtToken) {
+        return UserInfo.builder()
+                .username(jwtToken.getTokenAttributes()
+                        .getOrDefault("sub", "")
+                        .toString())
+                .publicId(jwtToken.getTokenAttributes()
+                        .getOrDefault("publicId", "")
+                        .toString())
+                .build();
     }
 }

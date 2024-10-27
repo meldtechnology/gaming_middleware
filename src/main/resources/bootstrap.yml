@@ -6,3 +6,5 @@ spring:
   cloud:
     config:
       uri: http://${CONFIG_SERVER_HOST}:9088
+      enabled: true
+      fail-fast: true

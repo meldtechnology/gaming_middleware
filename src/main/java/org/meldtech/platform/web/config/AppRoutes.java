@@ -39,6 +39,26 @@ public interface AppRoutes {
     interface Document {
         String DOCUMENT_BASE = API_V1_URL + "/documents";
         String DOCUMENT_UPLOAD = DOCUMENT_BASE + "/upload";
+
+        String DOCUMENT_CYCLE = DOCUMENT_BASE + "/cycles";
+
+        String DOCUMENT_TYPE = DOCUMENT_BASE + "/types";
+        String DOCUMENT_TYPE_NAME = DOCUMENT_BASE + "/types/{name}";
+
+        String DOCUMENT_FILE = DOCUMENT_BASE + "/files";
+        String DOCUMENT_FILE_NAME = DOCUMENT_BASE + "/files/{name}";
+
+        String DOCUMENT_REFERENCE = DOCUMENT_BASE + "/reference/{reference}";
+        String DOCUMENT_METRIC = DOCUMENT_BASE + "/metrics";
+        String DOCUMENT_STATUS = DOCUMENT_BASE + "/statues";
+        String DOCUMENT_BY_STATUS = DOCUMENT_BASE + "/status/{status}";
+        String DOCUMENT_REVIEW = DOCUMENT_BASE + "/REVIEW";
+        String DOCUMENT_DECLINE = DOCUMENT_BASE + "/DECLINE";
+        String DOCUMENT_APPROVE = DOCUMENT_BASE + "/APPROVE";
+        String DOCUMENT_ISSUE = DOCUMENT_BASE + "/ISSUE";
+
+        String DOCUMENT_FORM_TEMPLATE = DOCUMENT_BASE + "/template";
+        String DOCUMENT_FORM_COMPONENT = DOCUMENT_BASE + "/components";
     }
 
     interface Authentication {
