@@ -37,6 +37,12 @@ public class DocumentFileHandler {
         return buildServerResponse(fileService.getDocumentFile(name));
     }
 
+    public Mono<ServerResponse> getDocumentFileByCode(ServerRequest request)  {
+        String code = request.pathVariable("code");
+        log.info("Get document file by name ", code, " Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(fileService.getDocumentFileByCode(code));
+    }
+
     public Mono<ServerResponse> createFile(ServerRequest request)  {
         Mono<DocumentFileRequest>  fileRequestMono = request.bodyToMono(DocumentFileRequest.class)
                 .doOnNext(customValidator::validateEntries);

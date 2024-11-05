@@ -41,12 +41,14 @@ public interface AppRoutes {
         String DOCUMENT_UPLOAD = DOCUMENT_BASE + "/upload";
 
         String DOCUMENT_CYCLE = DOCUMENT_BASE + "/cycles";
+        String FEE_TYPE = DOCUMENT_BASE + "/fees/type";
 
         String DOCUMENT_TYPE = DOCUMENT_BASE + "/types";
         String DOCUMENT_TYPE_NAME = DOCUMENT_BASE + "/types/{name}";
 
         String DOCUMENT_FILE = DOCUMENT_BASE + "/files";
         String DOCUMENT_FILE_NAME = DOCUMENT_BASE + "/files/{name}";
+        String DOCUMENT_FILE_CODE = DOCUMENT_BASE + "/files/{code}";
 
         String DOCUMENT_REFERENCE = DOCUMENT_BASE + "/reference/{reference}";
         String DOCUMENT_METRIC = DOCUMENT_BASE + "/metrics";

@@ -10,10 +10,7 @@ import org.meldtech.platform.model.api.request.ApplicantDocumentRequest;
 import org.meldtech.platform.model.api.request.DocumentFileRequest;
 import org.meldtech.platform.model.api.request.DocumentTypeRequest;
 import org.meldtech.platform.model.api.request.DocumentUpdateRequest;
-import org.meldtech.platform.web.documents.ApplicationDocumentHandler;
-import org.meldtech.platform.web.documents.DocumentCycleHandler;
-import org.meldtech.platform.web.documents.DocumentFileHandler;
-import org.meldtech.platform.web.documents.DocumentTypeHandler;
+import org.meldtech.platform.web.documents.*;
 import org.meldtech.platform.web.documents.form.FormHandler;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
@@ -45,6 +42,22 @@ public class WebDocumentConfig {
     public RouterFunction<ServerResponse> cycleEndpointHandler(DocumentCycleHandler handler) {
         return route()
                 .GET(DOCUMENT_CYCLE, accept(MediaType.APPLICATION_JSON), handler::getDocumentCycles)
+                .build();
+    }
+
+    // Fee Type
+    @Bean
+    @RouterOperations({
+            @RouterOperation(path = FEE_TYPE, produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = RequestMethod.GET, beanClass = FeeTypeHandler.class, beanMethod = "getFeeTypes",
+                    operation = @Operation( operationId = "getFeeTypes", tags = "Documents Management API",
+                            description = "Get Fee Types", summary = "Get Fee Types"
+                    )
+            ),
+    })
+    public RouterFunction<ServerResponse> feeEndpointHandler(FeeTypeHandler handler) {
+        return route()
+                .GET(FEE_TYPE, accept(MediaType.APPLICATION_JSON), handler::getFeeTypes)
                 .build();
     }
 
@@ -123,6 +136,13 @@ public class WebDocumentConfig {
                             parameters = {@Parameter(in = ParameterIn.PATH, name = "name")}
                     )
             ),
+            @RouterOperation(path = DOCUMENT_FILE_CODE, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = DocumentFileHandler.class, beanMethod = "getDocumentFileByCode",
+                    operation = @Operation(operationId = "getDocumentFileByCode", tags = "Documents Management API",
+                            description = "Get Document File by Code", summary = "Get Document File by Code",
+                            parameters = {@Parameter(in = ParameterIn.PATH, name = "code")}
+                    )
+            ),
             @RouterOperation(path = DOCUMENT_FILE, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.POST, beanClass = DocumentFileHandler.class, beanMethod = "createFile",
                     operation = @Operation(operationId = "createFile", tags = "Documents Management API",
@@ -145,6 +165,7 @@ public class WebDocumentConfig {
         return route()
                 .GET(DOCUMENT_FILE, accept(MediaType.APPLICATION_JSON), handler::getDocumentFiles)
                 .GET(DOCUMENT_FILE_NAME, accept(MediaType.APPLICATION_JSON), handler::getDocumentFile)
+                .GET(DOCUMENT_FILE_CODE, accept(MediaType.APPLICATION_JSON), handler::getDocumentFileByCode)
                 .POST(DOCUMENT_FILE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createFile)
                 .PUT(DOCUMENT_FILE_NAME, accept(MediaType.APPLICATION_JSON)

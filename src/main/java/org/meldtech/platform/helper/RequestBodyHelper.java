@@ -47,9 +47,9 @@ public class RequestBodyHelper {
     }
 
     public static Mono<DocumentFileRequest> reconstruct(UserInfo userInfo, DocumentFileRequest request) {
-        return Mono.just(new DocumentFileRequest(
+        return Mono.just(new DocumentFileRequest(request.code(),
                 request.name(), request.description(), request.logo(), request.publicVisibility(),
-                request.renewalName(), request.renewalDuration(), request.typeName(), request.flatFee(),
-                request.formTemplate(), userInfo.username()));
+                request.renewalName(), request.renewalDuration(), request.typeName(), request.feeType(),
+                request.value(), request.formTemplate(), userInfo.username()));
     }
 }
