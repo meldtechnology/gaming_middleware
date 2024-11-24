@@ -48,6 +48,7 @@ public class ResourceServer {
             "/v1/oauth2/clients/**",
             "/v1/auth/users/**",
             "/v1/documents/upload/**",
+            "/v1/documents/public/**",
             "/v1/users/verify/**",
             "/v1/users/public/**",
             "/webjars/**",

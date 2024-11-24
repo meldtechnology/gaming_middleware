@@ -47,6 +47,8 @@ public interface AppRoutes {
         String DOCUMENT_TYPE_NAME = DOCUMENT_BASE + "/types/{name}";
 
         String DOCUMENT_FILE = DOCUMENT_BASE + "/files";
+        String DOCUMENT_FILE_PUBLIC = DOCUMENT_BASE + "/public/files";
+        String DOCUMENT_FILE_NAME_PUBLIC = DOCUMENT_BASE + "/public/files/{name}";
         String DOCUMENT_FILE_NAME = DOCUMENT_BASE + "/files/{name}";
         String DOCUMENT_FILE_CODE = DOCUMENT_BASE + "/files/{code}";
 
@@ -61,6 +63,8 @@ public interface AppRoutes {
 
         String DOCUMENT_FORM_TEMPLATE = DOCUMENT_BASE + "/template";
         String DOCUMENT_FORM_COMPONENT = DOCUMENT_BASE + "/components";
+
+        String DOCUMENT_BASE_PUBLIC = DOCUMENT_BASE + "/public";
     }
 
     interface Authentication {

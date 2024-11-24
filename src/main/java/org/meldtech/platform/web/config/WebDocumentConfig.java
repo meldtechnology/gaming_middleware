@@ -129,7 +129,27 @@ public class WebDocumentConfig {
                                     @Parameter(in = ParameterIn.QUERY, name = "end")
                             })
             ),
+            @RouterOperation(path = DOCUMENT_FILE_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = RequestMethod.GET, beanClass = DocumentFileHandler.class, beanMethod = "getDocumentFiles",
+                    operation = @Operation( operationId = "getDocumentFiles", tags = "Documents Management API",
+                            description = "Get Document Files", summary = "Get Document Files",
+                            parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "page", required = true, example = "1"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "size", required = true, example = "10"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "sortIn", example = "ASC"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "start"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "end")
+                            })
+            ),
             @RouterOperation(path = DOCUMENT_FILE_NAME, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = DocumentFileHandler.class, beanMethod = "getDocumentFile",
+                    operation = @Operation(operationId = "getDocumentFile", tags = "Documents Management API",
+                            description = "Get Document File by Name", summary = "Get Document File by Name",
+                            parameters = {@Parameter(in = ParameterIn.PATH, name = "name")}
+                    )
+            ),
+            @RouterOperation(path = DOCUMENT_FILE_NAME_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = DocumentFileHandler.class, beanMethod = "getDocumentFile",
                     operation = @Operation(operationId = "getDocumentFile", tags = "Documents Management API",
                             description = "Get Document File by Name", summary = "Get Document File by Name",
@@ -166,6 +186,8 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_FILE, accept(MediaType.APPLICATION_JSON), handler::getDocumentFiles)
                 .GET(DOCUMENT_FILE_NAME, accept(MediaType.APPLICATION_JSON), handler::getDocumentFile)
                 .GET(DOCUMENT_FILE_CODE, accept(MediaType.APPLICATION_JSON), handler::getDocumentFileByCode)
+                .GET(DOCUMENT_FILE_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::getDocumentFiles)
+                .GET(DOCUMENT_FILE_NAME_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::getDocumentFile)
                 .POST(DOCUMENT_FILE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createFile)
                 .PUT(DOCUMENT_FILE_NAME, accept(MediaType.APPLICATION_JSON)
@@ -227,6 +249,14 @@ public class WebDocumentConfig {
                             @Schema( implementation = ApplicantDocumentRequest.class)))
                     )
             ),
+            @RouterOperation(path = DOCUMENT_BASE_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.POST, beanClass = ApplicationDocumentHandler.class, beanMethod = "createApplication",
+                    operation = @Operation(operationId = "createApplication", tags = "Application Documents Management API",
+                            description = "Create Application", summary = "Create Application",
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = ApplicantDocumentRequest.class)))
+                    )
+            ),
             @RouterOperation(path = DOCUMENT_REVIEW, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PUT, beanClass = ApplicationDocumentHandler.class, beanMethod = "reviewApplication",
                     operation = @Operation(operationId = "reviewApplication", tags = "Application Documents Management API",
@@ -268,6 +298,8 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationStatuses)
                 .GET(DOCUMENT_BY_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationsByStatus)
                 .POST(DOCUMENT_BASE, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)
+                .POST(DOCUMENT_BASE_PUBLIC, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)
                 .PUT(DOCUMENT_REVIEW, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::reviewApplication)
