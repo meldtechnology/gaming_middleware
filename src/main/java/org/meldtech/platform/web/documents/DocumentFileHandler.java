@@ -37,6 +37,12 @@ public class DocumentFileHandler {
         return buildServerResponse(fileService.getDocumentFile(name));
     }
 
+    public Mono<ServerResponse> getDocumentFilesWithFilter(ServerRequest request)  {
+       String categoryFilter = request.queryParam("categoryFilter").orElse("");
+        log.info("Get available files by filter, Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(fileService.getDocumentFilesWithFilter(categoryFilter, reportSettings(request)));
+    }
+
     public Mono<ServerResponse> getDocumentFileByCode(ServerRequest request)  {
         String code = request.pathVariable("code");
         log.info("Get document file by name ", code, " Requested from ", request.headers().firstHeader(X_FORWARD_FOR));

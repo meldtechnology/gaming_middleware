@@ -48,6 +48,7 @@ public interface AppRoutes {
 
         String DOCUMENT_FILE = DOCUMENT_BASE + "/files";
         String DOCUMENT_FILE_PUBLIC = DOCUMENT_BASE + "/public/files";
+        String DOCUMENT_FILE_PUBLIC_WITH_FILTER = DOCUMENT_BASE + "/public/filter/files";
         String DOCUMENT_FILE_NAME_PUBLIC = DOCUMENT_BASE + "/public/files/{name}";
         String DOCUMENT_FILE_NAME = DOCUMENT_BASE + "/files/{name}";
         String DOCUMENT_FILE_CODE = DOCUMENT_BASE + "/files/{code}";

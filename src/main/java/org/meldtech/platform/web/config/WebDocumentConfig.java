@@ -142,6 +142,20 @@ public class WebDocumentConfig {
                                     @Parameter(in = ParameterIn.QUERY, name = "end")
                             })
             ),
+            @RouterOperation(path = DOCUMENT_FILE_PUBLIC_WITH_FILTER, produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = RequestMethod.GET, beanClass = DocumentFileHandler.class, beanMethod = "getDocumentFilesWithFilter",
+                    operation = @Operation( operationId = "getDocumentFilesWithFilter", tags = "Documents Management API",
+                            description = "Get Document Files With Filter", summary = "Get Document Files with Filters",
+                            parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "page", required = true, example = "1"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "size", required = true, example = "10"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "sortIn", example = "ASC"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "start"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "end"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "categoryFilter")
+                            })
+            ),
             @RouterOperation(path = DOCUMENT_FILE_NAME, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = DocumentFileHandler.class, beanMethod = "getDocumentFile",
                     operation = @Operation(operationId = "getDocumentFile", tags = "Documents Management API",
@@ -187,7 +201,7 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_FILE_NAME, accept(MediaType.APPLICATION_JSON), handler::getDocumentFile)
                 .GET(DOCUMENT_FILE_CODE, accept(MediaType.APPLICATION_JSON), handler::getDocumentFileByCode)
                 .GET(DOCUMENT_FILE_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::getDocumentFiles)
-                .GET(DOCUMENT_FILE_NAME_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::getDocumentFile)
+                .GET(DOCUMENT_FILE_PUBLIC_WITH_FILTER, accept(MediaType.APPLICATION_JSON), handler::getDocumentFilesWithFilter)
                 .POST(DOCUMENT_FILE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createFile)
                 .PUT(DOCUMENT_FILE_NAME, accept(MediaType.APPLICATION_JSON)
