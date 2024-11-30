@@ -11,10 +11,14 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.meldtech.platform.model.api.request.PasswordRestRecord;
 import org.meldtech.platform.model.api.request.UserRecord;
 import org.meldtech.platform.model.api.response.FullUserProfileRecord;
+import org.meldtech.platform.model.constant.VerificationType;
+import org.meldtech.platform.model.constant.VerifyType;
 import org.meldtech.platform.model.dto.UploadFileRequest;
+import org.meldtech.platform.model.dto.company.VerificationRequest;
 import org.meldtech.platform.web.authorizer.AuthorizerHandler;
 import org.meldtech.platform.model.dto.OAuth2RegisteredClientRecord;
 import org.meldtech.platform.web.roles.RoleHandler;
+import org.meldtech.platform.web.users.IdentityVerifierHandler;
 import org.meldtech.platform.web.users.UserProfileHandler;
 import org.meldtech.platform.web.users.UserSignInHandler;
 import org.meldtech.platform.web.users.UserSignUpHandler;
@@ -26,6 +30,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import java.util.List;
 
 import static org.meldtech.platform.web.config.AppRoutes.Authentication.*;
 import static org.meldtech.platform.web.config.AppRoutes.Client.CLIENT_BASE;
@@ -198,6 +204,27 @@ public class WebConfigs {
                 .PUT(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfileByAdmin)
                 .PUT(CHANGE_USER_ROLE_BY_ADMIN, accept(MediaType.APPLICATION_JSON), handler::changeUserRole)
+                .build();
+    }
+
+    // Public entities
+
+    @Bean
+    @RouterOperations({
+            @RouterOperation(path = ENTITY_VERIFY, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.POST, beanClass = IdentityVerifierHandler.class, beanMethod = "verifyCompany",
+                    operation = @Operation(operationId = "verifyCompany", tags = "Public Entities Verification API",
+                            description = "Verify Entity by Cac/Nin", summary = "Verify Entity by Cac/Nin",
+                            requestBody = @RequestBody(content = @Content(schema =
+                                @Schema( implementation = VerificationRequest.class))),
+                            parameters = {@Parameter(in = ParameterIn.QUERY, name = "type", required = true)
+                    })
+            ),
+    })
+    public RouterFunction<ServerResponse> entityEndpointHandler(IdentityVerifierHandler handler) {
+        return route()
+                .POST(ENTITY_VERIFY, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::verifyCompany)
                 .build();
     }
 

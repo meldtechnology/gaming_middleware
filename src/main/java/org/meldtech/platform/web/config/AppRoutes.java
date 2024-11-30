@@ -23,6 +23,7 @@ public interface AppRoutes {
 
         String USER_PROFILE_BASE = USER_BASE + "/profiles";
         String USER_PROFILE_BY_ID = USER_BASE + "/profiles/{publicId}";
+        String ENTITY_VERIFY = USER_BASE + "/verify/identity";
 
         String USER_RESEND_OTP = USER_BASE + "/public/{email}/send/otp";
         String USER_VERIFY_OTP = USER_BASE + "/verify/otp/{otp}";
