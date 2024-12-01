@@ -70,6 +70,11 @@ public interface AppRoutes {
         String DOCUMENT_BASE_PUBLIC = DOCUMENT_BASE + "/public";
     }
 
+    interface Payment {
+        String PAYMENT_BASE = API_V1_URL + "/payments";
+        String PAYMENT_CALLBACK = PAYMENT_BASE + "/callback";
+    }
+
     interface Authentication {
         String BASE_AUTH = API_V1_URL + "/auth/users";
         String AUTHORIZE_URL = BASE_AUTH + "/authorize/endpoint";

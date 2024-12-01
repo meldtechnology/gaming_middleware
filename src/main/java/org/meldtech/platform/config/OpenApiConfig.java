@@ -73,6 +73,10 @@ public class OpenApiConfig {
         return org.springdoc.core.models.GroupedOpenApi.builder().group("Documents").pathsToMatch("/**/documents/**").build();
     }
 
+    @Bean
+    org.springdoc.core.models.GroupedOpenApi paymentsApis() { // group all APIs with `admin` in the path
+        return org.springdoc.core.models.GroupedOpenApi.builder().group("Payments").pathsToMatch("/**/payments/**").build();
+    }
 
     private Parameter createHeader(String name, String defaultValue) {
         return new Parameter()
