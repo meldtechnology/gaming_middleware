@@ -255,6 +255,12 @@ public class WebDocumentConfig {
                             description = "Get Application statuses", summary = "Get Application statuses"
                     )
             ),
+            @RouterOperation(path = GENERATE_DOCUMENT_REFERENCE, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "generateApplicationReference",
+                    operation = @Operation(operationId = "generateApplicationReference", tags = "Application Documents Management API",
+                            description = "Generate application reference", summary = "Generate application reference"
+                    )
+            ),
             @RouterOperation(path = DOCUMENT_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.POST, beanClass = ApplicationDocumentHandler.class, beanMethod = "createApplication",
                     operation = @Operation(operationId = "createApplication", tags = "Application Documents Management API",
@@ -269,12 +275,6 @@ public class WebDocumentConfig {
                             description = "Create Application", summary = "Create Application",
                             requestBody = @RequestBody(content = @Content(schema =
                             @Schema( implementation = ApplicantDocumentRequest.class)))
-                    )
-            ),
-            @RouterOperation(path = GENERATE_DOCUMENT_REFERENCE, produces = { MediaType.APPLICATION_JSON_VALUE},
-                    method = RequestMethod.POST, beanClass = ApplicationDocumentHandler.class, beanMethod = "generateApplicationReference",
-                    operation = @Operation(operationId = "generateApplicationReference", tags = "Application Documents Management API",
-                            description = "Generate application reference", summary = "Generate application reference"
                     )
             ),
             @RouterOperation(path = DOCUMENT_REVIEW, produces = { MediaType.APPLICATION_JSON_VALUE},
@@ -316,12 +316,12 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::getApplication)
                 .GET(DOCUMENT_METRIC, accept(MediaType.APPLICATION_JSON), handler::getApplicationMetrics)
                 .GET(DOCUMENT_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationStatuses)
+                .GET(GENERATE_DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::generateApplicationReference)
                 .GET(DOCUMENT_BY_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationsByStatus)
                 .POST(DOCUMENT_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)
                 .POST(DOCUMENT_BASE_PUBLIC, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)
-                .POST(GENERATE_DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::generateApplicationReference)
                 .PUT(DOCUMENT_REVIEW, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::reviewApplication)
                 .PUT(DOCUMENT_DECLINE, accept(MediaType.APPLICATION_JSON)
