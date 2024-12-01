@@ -271,6 +271,12 @@ public class WebDocumentConfig {
                             @Schema( implementation = ApplicantDocumentRequest.class)))
                     )
             ),
+            @RouterOperation(path = GENERATE_DOCUMENT_REFERENCE, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.POST, beanClass = ApplicationDocumentHandler.class, beanMethod = "generateApplicationReference",
+                    operation = @Operation(operationId = "generateApplicationReference", tags = "Application Documents Management API",
+                            description = "Generate application reference", summary = "Generate application reference"
+                    )
+            ),
             @RouterOperation(path = DOCUMENT_REVIEW, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PUT, beanClass = ApplicationDocumentHandler.class, beanMethod = "reviewApplication",
                     operation = @Operation(operationId = "reviewApplication", tags = "Application Documents Management API",
@@ -315,6 +321,7 @@ public class WebDocumentConfig {
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)
                 .POST(DOCUMENT_BASE_PUBLIC, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)
+                .POST(GENERATE_DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::generateApplicationReference)
                 .PUT(DOCUMENT_REVIEW, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::reviewApplication)
                 .PUT(DOCUMENT_DECLINE, accept(MediaType.APPLICATION_JSON)

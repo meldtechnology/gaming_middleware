@@ -57,6 +57,11 @@ public class ApplicationDocumentHandler {
         return buildServerResponse(documentService.getStatuses());
     }
 
+    public Mono<ServerResponse> generateApplicationReference(ServerRequest request)  {
+        log.info("Generate application reference Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(documentService.generateReference());
+    }
+
     public Mono<ServerResponse> createApplication(ServerRequest request)  {
         Mono<ApplicantDocumentRequest>  documentRequestMono = request.bodyToMono(ApplicantDocumentRequest.class)
                 .doOnNext(customValidator::validateEntries);
