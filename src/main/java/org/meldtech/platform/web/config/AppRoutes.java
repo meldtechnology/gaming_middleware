@@ -73,6 +73,11 @@ public interface AppRoutes {
     interface Payment {
         String PAYMENT_BASE = API_V1_URL + "/payments";
         String PAYMENT_CALLBACK = PAYMENT_BASE + "/callback";
+        String CREATE_PAYMENT = PAYMENT_BASE + "/public";
+        String GET_PAYMENT = PAYMENT_BASE + "/reference/{reference}";
+        String GET_PAYMENT_EXTERNAL = PAYMENT_BASE + "/external/{reference}";
+        String GET_PAYMENT_STATUS = PAYMENT_BASE + "/status/{status}";
+        String GET_PAYMENT_DATE_RANGE = PAYMENT_BASE + "/report/date-range";
     }
 
     interface Authentication {
