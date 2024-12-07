@@ -50,6 +50,6 @@ public class RequestBodyHelper {
         return Mono.just(new DocumentFileRequest(request.code(),
                 request.name(), request.description(), request.logo(), request.publicVisibility(),
                 request.renewalName(), request.renewalDuration(), request.typeName(), request.feeType(),
-                request.value(), request.formTemplate(), userInfo.username()));
+                request.value(), request.flatFee(), request.formTemplate(), userInfo.username()));
     }
 }
