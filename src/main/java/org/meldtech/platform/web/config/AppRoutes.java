@@ -75,7 +75,7 @@ public interface AppRoutes {
         String PAYMENT_CALLBACK = PAYMENT_BASE + "/callback";
         String CREATE_PAYMENT = PAYMENT_BASE + "/public";
         String GET_PAYMENT = PAYMENT_BASE + "/reference/{reference}";
-        String GET_PAYMENT_EXTERNAL = PAYMENT_BASE + "/external/{reference}";
+        String GET_PAYMENT_EXTERNAL = PAYMENT_BASE + "/external/{externalReference}";
         String GET_PAYMENT_STATUS = PAYMENT_BASE + "/status/{status}";
         String GET_PAYMENT_DATE_RANGE = PAYMENT_BASE + "/report/date-range";
     }
