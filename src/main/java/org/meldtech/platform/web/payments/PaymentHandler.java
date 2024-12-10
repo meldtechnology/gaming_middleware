@@ -35,7 +35,7 @@ public class PaymentHandler {
         return callbackData
                 .doOnNext(log::info)
                 .map(callbackService::processCallback)
-                .flatMap(ApiResponse::buildServerResponse);
+                .flatMap(ApiResponse::buildServerResponseTestBody);
     }
 
     public Mono<ServerResponse> updatePaymentWithReference(ServerRequest request)  {

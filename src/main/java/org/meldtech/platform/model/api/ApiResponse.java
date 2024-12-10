@@ -23,6 +23,17 @@ public class ApiResponse {
         }
     }
 
+    public static Mono<ServerResponse> buildServerResponseTestBody(Mono<AppResponse> response) {
+        try {
+            return response
+                    .map(appResponse -> appResponse.getData().toString())
+                    .flatMap(ServerResponse.ok()::bodyValue)
+                    .switchIfEmpty(ServerResponse.badRequest().build());
+        }catch (Exception e) {
+            return ServerResponse.badRequest().build();
+        }
+    }
+
     public static Mono<ServerResponse> buildServerResponseNoBody(Mono<String> response) {
         try {
             return response
