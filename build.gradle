@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.meld-tech.platform'
-version = '2024.7.0'
+version = '2024.7.1'
 
 java {
     toolchain {
@@ -58,7 +58,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     // Meld-Tech Library
     implementation 'org.meld-tech.platform:user-service-lib:2024.4.0'
-    implementation 'org.meld-tech.platform:document-service-lib:2024.4.6'
+    implementation 'org.meld-tech.platform:document-service-lib:2024.4.7'
     implementation 'org.meld-tech.platform:payment-service-lib:2024.2.7'
     //Json Binder
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
