@@ -231,7 +231,8 @@ public class WebDocumentConfig {
                             description = "Get Application by reference", summary = "Get Application by reference",
                             parameters = {@Parameter(in = ParameterIn.PATH, name = "reference")}
                     )
-            ),@RouterOperation(path = DOCUMENT_BY_STATUS, produces = { MediaType.APPLICATION_JSON_VALUE},
+            ),
+            @RouterOperation(path = DOCUMENT_BY_STATUS, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getApplicationsByStatus",
                     operation = @Operation(operationId = "getApplicationsByStatus", tags = "Application Documents Management API",
                             description = "Get Application by status", summary = "Get Application by status",
@@ -247,6 +248,12 @@ public class WebDocumentConfig {
                     method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getApplicationMetrics",
                     operation = @Operation(operationId = "getApplicationMetrics", tags = "Application Documents Management API",
                             description = "Get Application Metrics", summary = "Get Application Metrics"
+                    )
+            ),
+            @RouterOperation(path = DOCUMENT_LICENSE_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getAppLicenseMetrics",
+                    operation = @Operation(operationId = "getAppLicenseMetrics", tags = "Application Documents Management API",
+                            description = "Get License Metrics", summary = "Get License Metrics"
                     )
             ),
             @RouterOperation(path = DOCUMENT_STATUS, produces = { MediaType.APPLICATION_JSON_VALUE},
@@ -315,6 +322,7 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_BASE, accept(MediaType.APPLICATION_JSON), handler::getApplications)
                 .GET(DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::getApplication)
                 .GET(DOCUMENT_METRIC, accept(MediaType.APPLICATION_JSON), handler::getApplicationMetrics)
+                .GET(DOCUMENT_LICENSE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getAppLicenseMetrics)
                 .GET(DOCUMENT_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationStatuses)
                 .GET(GENERATE_DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::generateApplicationReference)
                 .GET(DOCUMENT_BY_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationsByStatus)

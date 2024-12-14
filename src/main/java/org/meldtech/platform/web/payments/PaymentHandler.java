@@ -3,8 +3,6 @@ package org.meldtech.platform.web.payments;
 import lombok.RequiredArgsConstructor;
 import org.meldtech.platform.config.CustomValidator;
 import org.meldtech.platform.model.api.ApiResponse;
-import org.meldtech.platform.model.api.AppResponse;
-import org.meldtech.platform.model.api.request.ApplicantDocumentRequest;
 import org.meldtech.platform.model.api.request.PaymentRequest;
 import org.meldtech.platform.model.enums.PaymentStatusType;
 import org.meldtech.platform.service.PaymentCallbackService;
@@ -77,5 +75,10 @@ public class PaymentHandler {
         return paymentRequest
                 .map(transactionService::createTransaction)
                 .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> getPaymentMetrics(ServerRequest request)  {
+        log.info("Get Payment Metrics Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(transactionService.getPaymentMetrics());
     }
 }

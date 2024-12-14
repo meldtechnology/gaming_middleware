@@ -220,11 +220,18 @@ public class WebConfigs {
                             parameters = {@Parameter(in = ParameterIn.QUERY, name = "type", required = true)
                     })
             ),
+            @RouterOperation(path = ENTITY_METRICS, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = IdentityVerifierHandler.class, beanMethod = "getEntityMetrics",
+                    operation = @Operation(operationId = "getEntityMetrics", tags = "Public Entities Verification API",
+                            description = "Company Entity Metrics", summary = "Company Entity Metrics" )
+
+            )
     })
     public RouterFunction<ServerResponse> entityEndpointHandler(IdentityVerifierHandler handler) {
         return route()
                 .POST(ENTITY_VERIFY, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::verifyCompany)
+                .GET(ENTITY_METRICS, accept(MediaType.APPLICATION_JSON), handler::getEntityMetrics)
                 .build();
     }
 

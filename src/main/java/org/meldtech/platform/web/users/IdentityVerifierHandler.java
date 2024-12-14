@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import static org.meldtech.platform.model.api.ApiResponse.buildServerResponse;
+
 @Service
 @RequiredArgsConstructor
 public class IdentityVerifierHandler {
@@ -26,5 +28,10 @@ public class IdentityVerifierHandler {
         return verifyRequest
                 .map(request1 -> companyService.verifyIdentity(request1, VerifyType.valueOf(type)))
                 .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> getEntityMetrics(ServerRequest request)  {
+        log.info("Get Operator Metrics Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(companyService.getTotalOperator());
     }
 }

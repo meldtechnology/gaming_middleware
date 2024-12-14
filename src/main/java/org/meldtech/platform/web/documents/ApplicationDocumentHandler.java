@@ -123,6 +123,11 @@ public class ApplicationDocumentHandler {
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
+    public Mono<ServerResponse> getAppLicenseMetrics(ServerRequest request)  {
+        log.info("Get Issued License Metrics Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(documentService.getLicenseMetrics());
+    }
+
     private Mono<ServerResponse> getOrDateRangeApplications(ServerRequest request) {
         return request.queryParam("from").isPresent() ?
                 buildServerResponse(documentService.getApplicationsByDatRanges(

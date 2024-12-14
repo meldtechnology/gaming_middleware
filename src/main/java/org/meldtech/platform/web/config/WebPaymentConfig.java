@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.meldtech.platform.web.config.AppRoutes.Document.*;
-import static org.meldtech.platform.web.config.AppRoutes.Document.GENERATE_DOCUMENT_REFERENCE;
 import static org.meldtech.platform.web.config.AppRoutes.Payment.*;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
@@ -56,6 +54,12 @@ public class WebPaymentConfig {
                                     @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
                                     @Parameter(in = ParameterIn.QUERY, name = "sortIn", example = "DESC")
                     })
+            ),
+            @RouterOperation(path = GET_PAYMENT_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = PaymentHandler.class, beanMethod = "getPaymentMetrics",
+                    operation = @Operation(operationId = "getPaymentMetrics", tags = "Transactions Management API",
+                            description = "Get Payment Metrics", summary = "Get Payment Metrics"
+                    )
             ),
             @RouterOperation(path = GET_PAYMENT_DATE_RANGE, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = PaymentHandler.class, beanMethod = "getTransactionByDateRange",
@@ -100,6 +104,7 @@ public class WebPaymentConfig {
                 .POST(CREATE_PAYMENT, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createTransaction)
                 .PUT(GET_PAYMENT_EXTERNAL, accept(MediaType.APPLICATION_JSON), handler::updatePaymentWithReference)
+                .GET(GET_PAYMENT_METRIC, accept(MediaType.APPLICATION_JSON), handler::getPaymentMetrics)
                 .GET(GET_PAYMENT, accept(MediaType.APPLICATION_JSON), handler::getTransactionByReference)
                 .GET(GET_PAYMENT_EXTERNAL, accept(MediaType.APPLICATION_JSON), handler::getTransactionByExtReference)
                 .GET(GET_PAYMENT_STATUS, accept(MediaType.APPLICATION_JSON), handler::getTransactionByStatus)
