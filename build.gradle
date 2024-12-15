@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.meld-tech.platform'
-version = '2024.8.0'
+version = '2024.8.1'
 
 java {
     toolchain {
@@ -59,7 +59,7 @@ dependencies {
     // Meld-Tech Library
     implementation 'org.meld-tech.platform:user-service-lib:2024.5.1'
     implementation 'org.meld-tech.platform:document-service-lib:2024.4.9'
-    implementation 'org.meld-tech.platform:payment-service-lib:2024.3.1'
+    implementation 'org.meld-tech.platform:payment-service-lib:2024.3.2'
     //Json Binder
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     // Validation
