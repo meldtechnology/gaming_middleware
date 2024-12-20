@@ -15,8 +15,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.meldtech.platform.helper.RequestBodyHelper.getDate;
-import static org.meldtech.platform.helper.RequestBodyHelper.reconstruct;
+import static org.meldtech.platform.helper.RequestBodyHelper.*;
 import static org.meldtech.platform.model.api.ApiRequest.reportSettings;
 import static org.meldtech.platform.model.api.ApiResponse.buildServerResponse;
 
@@ -126,6 +125,11 @@ public class ApplicationDocumentHandler {
     public Mono<ServerResponse> getAppLicenseMetrics(ServerRequest request)  {
         log.info("Get Issued License Metrics Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return buildServerResponse(documentService.getLicenseMetrics());
+    }
+
+    public Mono<ServerResponse> getDocumentAppReport(ServerRequest request)  {
+        log.info("Get Document Application Report Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(documentService.getDocumentReport(reportDuration(request)));
     }
 
     private Mono<ServerResponse> getOrDateRangeApplications(ServerRequest request) {

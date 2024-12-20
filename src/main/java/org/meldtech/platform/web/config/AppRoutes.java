@@ -59,6 +59,7 @@ public interface AppRoutes {
         String GENERATE_DOCUMENT_REFERENCE = DOCUMENT_BASE + "/public/reference";
         String DOCUMENT_METRIC = DOCUMENT_BASE + "/metrics";
         String DOCUMENT_LICENSE_METRIC = DOCUMENT_BASE + "/license/metrics";
+        String DOCUMENT_REPORT_METRIC = DOCUMENT_BASE + "/report/metrics";
         String DOCUMENT_STATUS = DOCUMENT_BASE + "/statues";
         String DOCUMENT_BY_STATUS = DOCUMENT_BASE + "/status/{status}";
         String DOCUMENT_REVIEW = DOCUMENT_BASE + "/REVIEW";

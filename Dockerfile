@@ -9,6 +9,6 @@ RUN apk cache -v sync
 # Set the working directory to /app
 WORKDIR /app
 # Copy the fat jar into the work directory of the container
-COPY build/libs/middleware-service-2024.8.2.jar /app/middleware-service.jar
+COPY build/libs/middleware-service-2024.8.3.jar /app/middleware-service.jar
 #execute the application
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","middleware-service.jar"]

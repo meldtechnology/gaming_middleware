@@ -42,6 +42,12 @@ public class RequestBodyHelper {
         return new Instant[]{report.getStart(), report.getEnd()};
     }
 
+    public static ReportSettings reportDuration(ServerRequest request) {
+        return ReportSettings.instance()
+                .start(request.queryParam("from").orElse("2024-01-01"))
+                .end(request.queryParam("to").orElse("2024-12-31"));
+    }
+
     public static Mono<DocumentTypeRequest> reconstruct(UserInfo userInfo, DocumentTypeRequest request) {
         return Mono.just(new DocumentTypeRequest(request.name(), request.description(), userInfo.username()));
     }

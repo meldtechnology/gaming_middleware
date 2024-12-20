@@ -256,6 +256,15 @@ public class WebDocumentConfig {
                             description = "Get License Metrics", summary = "Get License Metrics"
                     )
             ),
+            @RouterOperation(path = DOCUMENT_REPORT_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getDocumentAppReport",
+                    operation = @Operation(operationId = "getDocumentAppReport", tags = "Application Documents Management API",
+                            description = "Get Document Report Metrics", summary = "Get Document Report Metrics",
+                            parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "start", required = true, example = "2024-01-01"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "end", required = true, example = "2024-12-31")
+                    })
+            ),
             @RouterOperation(path = DOCUMENT_STATUS, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getApplicationStatuses",
                     operation = @Operation(operationId = "getApplicationStatuses", tags = "Application Documents Management API",
@@ -323,6 +332,7 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::getApplication)
                 .GET(DOCUMENT_METRIC, accept(MediaType.APPLICATION_JSON), handler::getApplicationMetrics)
                 .GET(DOCUMENT_LICENSE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getAppLicenseMetrics)
+                .GET(DOCUMENT_REPORT_METRIC, accept(MediaType.APPLICATION_JSON), handler::getDocumentAppReport)
                 .GET(DOCUMENT_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationStatuses)
                 .GET(GENERATE_DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::generateApplicationReference)
                 .GET(DOCUMENT_BY_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationsByStatus)
