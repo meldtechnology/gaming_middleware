@@ -78,6 +78,11 @@ public class OpenApiConfig {
         return org.springdoc.core.models.GroupedOpenApi.builder().group("Payments").pathsToMatch("/**/payments/**").build();
     }
 
+    @Bean
+    org.springdoc.core.models.GroupedOpenApi reportsApis() { // group all APIs with `report` in the path
+        return org.springdoc.core.models.GroupedOpenApi.builder().group("Reports").pathsToMatch("/**/reports/**").build();
+    }
+
     private Parameter createHeader(String name, String defaultValue) {
         return new Parameter()
                 .in("header")

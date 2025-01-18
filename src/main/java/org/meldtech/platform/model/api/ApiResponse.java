@@ -1,6 +1,9 @@
 package org.meldtech.platform.model.api;
 
 import org.meldtech.platform.model.UserInfo;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -28,6 +31,20 @@ public class ApiResponse {
             return response
                     .map(appResponse -> appResponse.getData().toString())
                     .flatMap(ServerResponse.ok()::bodyValue)
+                    .switchIfEmpty(ServerResponse.badRequest().build());
+        }catch (Exception e) {
+            return ServerResponse.badRequest().build();
+        }
+    }
+
+    public static Mono<ServerResponse> buildServerResponseStreamBody(Mono<byte[]> response) {
+        try {
+            return response
+                    .map(appResponse -> appResponse)
+                    .flatMap(ServerResponse.ok().headers(httpHeaders -> {
+                        httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE));
+                        httpHeaders.setContentDisposition(ContentDisposition.attachment().filename("report.pdf").build());
+                    })::bodyValue)
                     .switchIfEmpty(ServerResponse.badRequest().build());
         }catch (Exception e) {
             return ServerResponse.badRequest().build();

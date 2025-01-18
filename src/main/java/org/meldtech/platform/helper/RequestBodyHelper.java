@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestBodyHelper {
@@ -40,6 +42,17 @@ public class RequestBodyHelper {
                 .start(request.queryParam("from").orElse("2024-01-01"))
                 .end(request.queryParam("to").orElse("2024-12-31"));
         return new Instant[]{report.getStart(), report.getEnd()};
+    }
+
+    public static ReportSettings getReportSetting(ServerRequest request) {
+        return ReportSettings.instance()
+                .sortIn(request.queryParam("sortIn").orElse("asc"))
+                .sortBy(request.queryParam("sortBy").orElse("createdOn"))
+                .start(request.queryParam("from").orElse("2024-01-01"))
+                .end(request.queryParam("to").orElse("2024-12-31"));
+    }
+    public static List<String> paramList(ServerRequest request, String name) {
+        return List.of(request.queryParam(name).orElse("").split(","));
     }
 
     public static ReportSettings reportDuration(ServerRequest request) {
