@@ -47,6 +47,11 @@ jobs:
                 "id": "meld-payment-services",
                 "username": "${{ secrets.USER_READ }}",
                 "password": "${{ secrets.TOKEN_READ }}"
+            },
+            {
+                "id": "meld-report-services",
+                "username": "${{ secrets.USER_READ }}",
+                "password": "${{ secrets.TOKEN_READ }}"
             }]
 
       # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
