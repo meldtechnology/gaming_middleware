@@ -12,6 +12,9 @@ jobs:
   if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    env:
+        BASE-IMAGE: josleke/middleware-service
+        RELEASE-TAG: 2024.8.8-Release
     steps:
       - run: |
           echo The PR was successfully merged.
