@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         BASE-IMAGE: josleke/middleware-service
-        RELEASE-TAG: 2024.8.8-Release
+        RELEASE-TAG: 2024.8.10-Release
     steps:
       - run: |
           echo The PR was successfully merged.

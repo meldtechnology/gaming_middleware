@@ -87,10 +87,9 @@ public interface AppRoutes {
     interface Reporting {
         String REPORT_BASE = API_V1_URL + "/reports";
         String DATE_RANGE = REPORT_BASE + "/date-range";
-        String DATE_RANGE_FILTER = REPORT_BASE + "/date-range/filter";
+//        String DATE_RANGE_FILTER = REPORT_BASE + "/date-range/filter";
         String APPLICATION_REPORT = DATE_RANGE + "/applications";
-        String APPLICATION_FILTER_REPORT = DATE_RANGE_FILTER + "/applications";
-
+        String APPLICATION_FILTER_REPORT = APPLICATION_REPORT + "/filter";
     }
 
     interface Authentication {
