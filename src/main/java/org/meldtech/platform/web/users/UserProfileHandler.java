@@ -8,6 +8,7 @@ import org.meldtech.platform.model.api.ApiResponse;
 import org.meldtech.platform.model.api.request.UserProfileRecord;
 import org.meldtech.platform.model.api.response.FullUserProfileRecord;
 import org.meldtech.platform.service.OAuth2RegisteredClientService;
+import org.meldtech.platform.service.UserPermissionService;
 import org.meldtech.platform.service.UserProfileService;
 import org.meldtech.platform.util.LoggerHelper;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -24,6 +25,7 @@ import static org.meldtech.platform.model.api.ApiResponse.buildServerResponse;
 public class UserProfileHandler {
     private final LoggerHelper log = LoggerHelper.newInstance(UserProfileHandler.class.getName());
     private final UserProfileService userProfileService;
+    private final UserPermissionService permissionService;
     private final CustomValidator customValidator;
 
     private static final String X_FORWARD_FOR = "X-Forwarded-For";
@@ -40,6 +42,15 @@ public class UserProfileHandler {
         return jwtAuthToken
                 .map(ApiResponse::getPublicIdFromToken)
                 .map(userProfileService::getUserProfile)
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> getUserPermissions(ServerRequest request)  {
+        Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
+        log.info("Get user permission Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return jwtAuthToken
+                .map(ApiResponse::getPublicIdFromToken)
+                .map(permissionService::getUserPermissions)
                 .flatMap(ApiResponse::buildServerResponse);
     }
 

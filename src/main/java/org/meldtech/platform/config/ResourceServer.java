@@ -54,6 +54,7 @@ public class ResourceServer {
             "/v1/payments/callback/**",
             "/v1/payments/public/**",
             "/v1/reports/**",
+            "/v1/reports/**",
 //            "/v1/**",
             "/webjars/**",
             // -- Swagger UI v3 (OpenAPI)

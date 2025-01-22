@@ -22,6 +22,7 @@ public interface AppRoutes {
         String USER_ENABLE = USER_ADMIN_BASE + "/activate/{publicId}";
 
         String USER_PROFILE_BASE = USER_BASE + "/profiles";
+        String USER_PERMISSION_BASE = USER_BASE + "/permissions";
         String USER_PROFILE_BY_ID = USER_BASE + "/profiles/{publicId}";
         String ENTITY_VERIFY = USER_BASE + "/verify/identity";
         String ENTITY_METRICS = USER_PROFILE_BASE + "/entity/metrics";

@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.net.InetSocketAddress;
+import java.util.Objects;
 
 import static org.meldtech.platform.model.api.ApiResponse.buildServerResponse;
 import static org.meldtech.platform.model.api.ApiResponse.buildServerResponseNoBody;
@@ -28,7 +29,11 @@ public class UserSignInHandler {
     private static final String X_FORWARD_FOR = "X-Forwarded-For";
 
     public Mono<ServerResponse> getAuthorizeEndpoint(ServerRequest request)  {
-        String clientIp = request.remoteAddress()
+//        String clientIp = request.remoteAddress()
+//                .orElse(new InetSocketAddress("unknown", 0))
+//                .getHostString();
+        String clientIp = request.headers().firstHeader(X_FORWARD_FOR);
+        clientIp = Objects.nonNull(clientIp) ? clientIp : request.remoteAddress()
                 .orElse(new InetSocketAddress("unknown", 0))
                 .getHostString();
         log.info("Get Authorization code url requested ",  clientIp);
