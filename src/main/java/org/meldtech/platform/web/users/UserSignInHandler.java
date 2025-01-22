@@ -29,35 +29,31 @@ public class UserSignInHandler {
     private static final String X_FORWARD_FOR = "X-Forwarded-For";
 
     public Mono<ServerResponse> getAuthorizeEndpoint(ServerRequest request)  {
-//        String clientIp = request.remoteAddress()
-//                .orElse(new InetSocketAddress("unknown", 0))
-//                .getHostString();
-        String clientIp = request.headers().firstHeader(X_FORWARD_FOR);
-        clientIp = Objects.nonNull(clientIp) ? clientIp : request.remoteAddress()
-                .orElse(new InetSocketAddress("unknown", 0))
-                .getHostString();
-        log.info("Get Authorization code url requested ",  clientIp);
-        return buildServerResponseNoBody(resourceOwnerService.requestAuthorizedUrl(clientIp));
+        log.info("Get Authorization code url requested ",  getClientIp(request));
+        return buildServerResponseNoBody(resourceOwnerService.requestAuthorizedUrl(getClientIp(request)));
     }
 
     public Mono<ServerResponse> requestAccessToken(ServerRequest request)  {
         String code = request.pathVariable("code");
-        String clientIp = request.remoteAddress()
-                .orElse(new InetSocketAddress("unknown", 0))
-                .getHostString();
         log.info("Providing code for access token  Requested", request.headers().firstHeader(X_FORWARD_FOR));
-        return buildServerResponse(tokenService.exchangeWithAccessToken(code, clientIp));
+        return buildServerResponse(tokenService.exchangeWithAccessToken(code, getClientIp(request)));
     }
 
     public Mono<ServerResponse> logout(ServerRequest request)  {
         String clientIp = request.remoteAddress()
                 .orElse(new InetSocketAddress("unknown", 0))
                 .getHostString();
-        log.info("Logout from app Requested", request.headers().firstHeader(X_FORWARD_FOR), " ", clientIp);
+        log.info("Logout from app Requested", request.headers().firstHeader(X_FORWARD_FOR), " ", getClientIp(request));
         return buildServerResponseNoBody(resourceOwnerService.requestLogoutEndpoint());
     }
 
 
+    private String getClientIp(ServerRequest request) {
+        String clientIp = request.headers().firstHeader(X_FORWARD_FOR);
+        return Objects.nonNull(clientIp) ? clientIp : request.remoteAddress()
+                .orElse(new InetSocketAddress("unknown", 0))
+                .getHostString();
+    }
 
 
 }
