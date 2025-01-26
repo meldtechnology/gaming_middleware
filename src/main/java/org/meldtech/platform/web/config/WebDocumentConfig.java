@@ -232,6 +232,13 @@ public class WebDocumentConfig {
                             parameters = {@Parameter(in = ParameterIn.PATH, name = "reference")}
                     )
             ),
+            @RouterOperation(path = DOCUMENT_LICENSE_BY_NUMBER, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getApplicationByLicenceNum",
+                    operation = @Operation(operationId = "getApplicationByLicenceNum", tags = "Application Documents Management API",
+                            description = "Get Application by license number", summary = "Get Application by license number",
+                            parameters = {@Parameter(in = ParameterIn.PATH, name = "licenseNum")}
+                    )
+            ),
             @RouterOperation(path = DOCUMENT_BY_STATUS, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = ApplicationDocumentHandler.class, beanMethod = "getApplicationsByStatus",
                     operation = @Operation(operationId = "getApplicationsByStatus", tags = "Application Documents Management API",
@@ -335,6 +342,7 @@ public class WebDocumentConfig {
                 .GET(DOCUMENT_REPORT_METRIC, accept(MediaType.APPLICATION_JSON), handler::getDocumentAppReport)
                 .GET(DOCUMENT_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationStatuses)
                 .GET(GENERATE_DOCUMENT_REFERENCE, accept(MediaType.APPLICATION_JSON), handler::generateApplicationReference)
+                .GET(DOCUMENT_LICENSE_BY_NUMBER, accept(MediaType.APPLICATION_JSON), handler::getApplicationByLicenceNum)
                 .GET(DOCUMENT_BY_STATUS, accept(MediaType.APPLICATION_JSON), handler::getApplicationsByStatus)
                 .POST(DOCUMENT_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::createApplication)

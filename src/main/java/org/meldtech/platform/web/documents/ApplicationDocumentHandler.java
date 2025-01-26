@@ -39,6 +39,12 @@ public class ApplicationDocumentHandler {
         return buildServerResponse(documentService.getApplications(reference));
     }
 
+    public Mono<ServerResponse> getApplicationByLicenceNum(ServerRequest request)  {
+        String licenseNum = request.pathVariable("licenseNum");
+        log.info("Get application document Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(documentService.getApplicationsByInvoiceNumber(licenseNum));
+    }
+
     public Mono<ServerResponse> getApplicationsByStatus(ServerRequest request)  {
         String status = request.pathVariable("status");
         log.info("Get application documents by status "+status+"," +
