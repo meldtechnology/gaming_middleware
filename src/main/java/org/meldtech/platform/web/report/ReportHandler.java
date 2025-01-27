@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.meldtech.platform.model.api.ApiResponse;
 import org.meldtech.platform.service.ApplicantDocumentService;
 import org.meldtech.platform.service.DownloadGeneratorService;
+import org.meldtech.platform.service.TransactionService;
 import org.meldtech.platform.util.LoggerHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -18,6 +19,7 @@ import static org.meldtech.platform.helper.RequestBodyHelper.paramList;
 public class ReportHandler {
     private final LoggerHelper log = LoggerHelper.newInstance(ReportHandler.class.getName());
     private final ApplicantDocumentService applicantDocumentService;
+    private final TransactionService transactionService;
     private final DownloadGeneratorService downloadGeneratorService;
 
     private static final String X_FORWARD_FOR = "X-Forwarded-For";
@@ -32,6 +34,31 @@ public class ReportHandler {
     public Mono<ServerResponse> appWithDateRangeFilter(ServerRequest request)  {
         log.info("Generate application with date range & Filter Report Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
         return applicantDocumentService.getApplicationReportByDateRangeAndFilter(getReportSetting(request), paramList(request, "status"))
+                .map(downloadGeneratorService::generatePDF)
+                .flatMap(ApiResponse::buildServerResponseStreamBody);
+    }
+
+    public Mono<ServerResponse> appWithDateRangeAndPaymentFilter(ServerRequest request)  {
+        String status = request.queryParams().getFirst("status");
+        log.info("Generate application with date range & Payment Filter Report Requested from ",
+                request.headers().firstHeader(X_FORWARD_FOR));
+        return applicantDocumentService.getApplicationReportByDateRangeAndPaymentStatus(getReportSetting(request), status)
+                .map(downloadGeneratorService::generatePDF)
+                .flatMap(ApiResponse::buildServerResponseStreamBody);
+    }
+
+    public Mono<ServerResponse>  paymentWithDateRange(ServerRequest request)  {
+        log.info("Generate payment with date range Report Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
+        return transactionService.getPaymentReportByDateRange(getReportSetting(request))
+                .map(downloadGeneratorService::generatePDF)
+                .flatMap(ApiResponse::buildServerResponseStreamBody);
+    }
+
+    public Mono<ServerResponse> paymentWithDateRangeAndPaymentFilter(ServerRequest request)  {
+        String status = request.queryParams().getFirst("status");
+        log.info("Generate payment with date range & Payment Filter Report Requested from ",
+                request.headers().firstHeader(X_FORWARD_FOR));
+        return transactionService.getPaymentReportByDateRangeAndStatus(getReportSetting(request), status)
                 .map(downloadGeneratorService::generatePDF)
                 .flatMap(ApiResponse::buildServerResponseStreamBody);
     }

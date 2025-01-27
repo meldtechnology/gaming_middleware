@@ -22,6 +22,7 @@ public interface AppRoutes {
         String USER_ENABLE = USER_ADMIN_BASE + "/activate/{publicId}";
 
         String USER_PROFILE_BASE = USER_BASE + "/profiles";
+        String USER_PERMISSION_BASE = USER_BASE + "/permissions";
         String USER_PROFILE_BY_ID = USER_BASE + "/profiles/{publicId}";
         String ENTITY_VERIFY = USER_BASE + "/verify/identity";
         String ENTITY_METRICS = USER_PROFILE_BASE + "/entity/metrics";
@@ -58,6 +59,7 @@ public interface AppRoutes {
         String DOCUMENT_REFERENCE = DOCUMENT_BASE + "/reference/{reference}";
         String GENERATE_DOCUMENT_REFERENCE = DOCUMENT_BASE + "/public/reference";
         String DOCUMENT_METRIC = DOCUMENT_BASE + "/metrics";
+        String DOCUMENT_LICENSE_BY_NUMBER = DOCUMENT_BASE + "/license/public/{licenseNum}";
         String DOCUMENT_LICENSE_METRIC = DOCUMENT_BASE + "/license/metrics";
         String DOCUMENT_REPORT_METRIC = DOCUMENT_BASE + "/report/metrics";
         String DOCUMENT_STATUS = DOCUMENT_BASE + "/statues";
@@ -87,10 +89,11 @@ public interface AppRoutes {
     interface Reporting {
         String REPORT_BASE = API_V1_URL + "/reports";
         String DATE_RANGE = REPORT_BASE + "/date-range";
-        String DATE_RANGE_FILTER = REPORT_BASE + "/date-range/filter";
         String APPLICATION_REPORT = DATE_RANGE + "/applications";
-        String APPLICATION_FILTER_REPORT = DATE_RANGE_FILTER + "/applications";
-
+        String PAYMENT_REPORT = DATE_RANGE + "/payments";
+        String APPLICATION_FILTER_REPORT = APPLICATION_REPORT + "/filter";
+        String DATE_RANGE_PAYMENT = APPLICATION_REPORT + "/payment";
+        String PAYMENT_FILTER_REPORT = PAYMENT_REPORT + "/status";
     }
 
     interface Authentication {

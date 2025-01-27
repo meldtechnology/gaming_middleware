@@ -154,6 +154,11 @@ public class WebConfigs {
                     operation = @Operation(operationId = "getUserProfile", tags = "User Profiles API",
                             description = "Get App User Profile", summary = "Get App User Profile")
             ),
+            @RouterOperation(path = USER_PERMISSION_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserPermissions",
+                    operation = @Operation(operationId = "getUserPermissions", tags = "User Profiles API",
+                            description = "Get App User Permission", summary = "Get App User Permission")
+            ),
             @RouterOperation(path = USER_PROFILE_BY_ID, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserProfileByAdmin",
                     operation = @Operation(operationId = "getUserProfileByAdmin", tags = "User Profiles API",
@@ -197,6 +202,7 @@ public class WebConfigs {
         return route()
                 .GET(USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON), handler::getProfiles)
                 .GET(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON), handler::getUserProfile)
+                .GET(USER_PERMISSION_BASE, accept(MediaType.APPLICATION_JSON), handler::getUserPermissions)
                 .GET(USER_PROFILE_BY_ID, accept(MediaType.APPLICATION_JSON), handler::getUserProfileByAdmin)
                 .GET(USER_PROFILE_METRIC, accept(MediaType.APPLICATION_JSON), handler::getUserMetric)
                 .PUT(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON)
