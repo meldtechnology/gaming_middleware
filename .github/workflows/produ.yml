@@ -91,5 +91,5 @@ jobs:
               # Now we have got the access of EC2 and we will start the deploy .
               export MIDDLEWARE_SERVICE=${{env.BASE-IMAGE}}:${{env.RELEASE-TAG}}
               echo "$MIDDLEWARE_SERVICE"
-              docker-compose -f /app/middleware-service.yml up -d
+              docker-compose -f ./app/middleware-service.yml up -d
               ' 
