@@ -1,6 +1,7 @@
 package org.meldtech.platform.web.report;
 
 import lombok.RequiredArgsConstructor;
+import org.meldtech.platform.constant.ReportType;
 import org.meldtech.platform.model.api.ApiResponse;
 import org.meldtech.platform.service.ApplicantDocumentService;
 import org.meldtech.platform.service.DownloadGeneratorService;
@@ -25,41 +26,50 @@ public class ReportHandler {
     private static final String X_FORWARD_FOR = "X-Forwarded-For";
 
     public Mono<ServerResponse> appWithDateRange(ServerRequest request)  {
+        String reportType = request.queryParam("reportType").orElse("PDF");
         log.info("Generate application with date range Report Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
         return applicantDocumentService.getApplicationReportByDateRange(getReportSetting(request))
-                .map(downloadGeneratorService::generatePDF)
-                .flatMap(ApiResponse::buildServerResponseStreamBody);
+                .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
+                .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
     }
 
     public Mono<ServerResponse> appWithDateRangeFilter(ServerRequest request)  {
+        String reportType = request.queryParam("reportType").orElse("PDF");
         log.info("Generate application with date range & Filter Report Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
         return applicantDocumentService.getApplicationReportByDateRangeAndFilter(getReportSetting(request), paramList(request, "status"))
-                .map(downloadGeneratorService::generatePDF)
-                .flatMap(ApiResponse::buildServerResponseStreamBody);
+                .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
+                .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
     }
 
     public Mono<ServerResponse> appWithDateRangeAndPaymentFilter(ServerRequest request)  {
+        String reportType = request.queryParam("reportType").orElse("PDF");
         String status = request.queryParams().getFirst("status");
         log.info("Generate application with date range & Payment Filter Report Requested from ",
                 request.headers().firstHeader(X_FORWARD_FOR));
         return applicantDocumentService.getApplicationReportByDateRangeAndPaymentStatus(getReportSetting(request), status)
-                .map(downloadGeneratorService::generatePDF)
-                .flatMap(ApiResponse::buildServerResponseStreamBody);
+                .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
+                .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
     }
 
     public Mono<ServerResponse>  paymentWithDateRange(ServerRequest request)  {
+        String reportType = request.queryParam("reportType").orElse("PDF");
         log.info("Generate payment with date range Report Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
         return transactionService.getPaymentReportByDateRange(getReportSetting(request))
-                .map(downloadGeneratorService::generatePDF)
-                .flatMap(ApiResponse::buildServerResponseStreamBody);
+                .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
+                .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
     }
 
     public Mono<ServerResponse> paymentWithDateRangeAndPaymentFilter(ServerRequest request)  {
+        String reportType = request.queryParam("reportType").orElse("PDF");
         String status = request.queryParams().getFirst("status");
         log.info("Generate payment with date range & Payment Filter Report Requested from ",
                 request.headers().firstHeader(X_FORWARD_FOR));
         return transactionService.getPaymentReportByDateRangeAndStatus(getReportSetting(request), status)
-                .map(downloadGeneratorService::generatePDF)
-                .flatMap(ApiResponse::buildServerResponseStreamBody);
+                .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
+                .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
+    }
+
+    private ReportType reportTpe(String reportType) {
+        return ReportType.valueOf(reportType.toUpperCase());
     }
 }
