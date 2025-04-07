@@ -3,12 +3,6 @@ package org.meldtech.platform.web.config;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import org.meldtech.platform.model.api.request.PaymentRequest;
-import org.meldtech.platform.web.payments.PaymentHandler;
 import org.meldtech.platform.web.report.ReportHandler;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
@@ -19,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.meldtech.platform.web.config.AppRoutes.Payment.*;
 import static org.meldtech.platform.web.config.AppRoutes.Reporting.*;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
-import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
@@ -34,6 +26,7 @@ public class WebReportConfig {
                     operation = @Operation(operationId = "appWithDateRange", tags = "Report Management API",
                             description = "Get Application Report by Date Range", summary = "Get Application Report by Date Range",
                             parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "reportType", example = "PDF"),
                                     @Parameter(in = ParameterIn.QUERY, name = "from", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "to", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
@@ -46,6 +39,7 @@ public class WebReportConfig {
                             description = "Get Application Report by Date Range and Filter",
                             summary = "Get Application Report by Date Range and filter",
                             parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "reportType", example = "PDF"),
                                     @Parameter(in = ParameterIn.QUERY, name = "from", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "to", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
@@ -59,6 +53,7 @@ public class WebReportConfig {
                             description = "Get Application Report by Date Range and Payment Status",
                             summary = "Get Application Report by Date Range and Payment status",
                             parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "reportType", example = "PDF"),
                                     @Parameter(in = ParameterIn.QUERY, name = "from", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "to", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
@@ -72,6 +67,7 @@ public class WebReportConfig {
                             description = "Get Payment Report by Date Range",
                             summary = "Get Payment Report by Date Range",
                             parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "reportType", example = "PDF"),
                                     @Parameter(in = ParameterIn.QUERY, name = "from", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "to", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
@@ -84,6 +80,7 @@ public class WebReportConfig {
                             description = "Get Payment Report by Date Range and Payment Status",
                             summary = "Get Payment Report by Date Range and Payment status",
                             parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "reportType", example = "PDF"),
                                     @Parameter(in = ParameterIn.QUERY, name = "from", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "to", required = true),
                                     @Parameter(in = ParameterIn.QUERY, name = "sortBy"),

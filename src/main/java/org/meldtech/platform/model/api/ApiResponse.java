@@ -1,5 +1,6 @@
 package org.meldtech.platform.model.api;
 
+import org.meldtech.platform.constant.ReportType;
 import org.meldtech.platform.model.UserInfo;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -37,17 +38,26 @@ public class ApiResponse {
         }
     }
 
-    public static Mono<ServerResponse> buildServerResponseStreamBody(Mono<byte[]> response) {
+    public static Mono<ServerResponse> buildServerResponseStreamBody(Mono<byte[]> response, ReportType streamType) {
         try {
             return response
                     .map(appResponse -> appResponse)
                     .flatMap(ServerResponse.ok().headers(httpHeaders -> {
-                        httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE));
-                        httpHeaders.setContentDisposition(ContentDisposition.attachment().filename("report.pdf").build());
+                        getHttpHeaders(httpHeaders, streamType);
                     })::bodyValue)
                     .switchIfEmpty(ServerResponse.badRequest().build());
         }catch (Exception e) {
             return ServerResponse.badRequest().build();
+        }
+    }
+
+    private static void getHttpHeaders(HttpHeaders httpHeaders, ReportType reportType) {
+        if(reportType == ReportType.PDF) {
+            httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE));
+            httpHeaders.setContentDisposition(ContentDisposition.attachment().filename("report.pdf").build());
+        }else if(reportType == ReportType.CSV) {
+            httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE));
+            httpHeaders.setContentDisposition(ContentDisposition.attachment().filename("report.csv").build());
         }
     }
 
