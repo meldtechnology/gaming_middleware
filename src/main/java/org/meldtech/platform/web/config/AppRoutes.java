@@ -98,8 +98,8 @@ public interface AppRoutes {
 
     interface Authentication {
         String BASE_AUTH = API_V1_URL + "/auth/users";
-        String AUTHORIZE_URL = BASE_AUTH + "/authorize/endpoint";
-        String AUTHORIZATION_CODE_URL = BASE_AUTH + "/token/endpoint/{code}";
+        String AUTHORIZE_URL = BASE_AUTH + "/authorize/endpoint/{appId}";
+        String AUTHORIZATION_CODE_URL = BASE_AUTH + "/token/endpoint/{appId}/{code}";
         String LOGOUT_URL = BASE_AUTH + "/logout/endpoint";
     }
 }

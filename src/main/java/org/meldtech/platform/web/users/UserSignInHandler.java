@@ -1,11 +1,7 @@
 package org.meldtech.platform.web.users;
 
 import lombok.RequiredArgsConstructor;
-import org.meldtech.platform.config.CustomValidator;
-import org.meldtech.platform.model.api.ApiResponse;
-import org.meldtech.platform.model.api.request.UserRecord;
 import org.meldtech.platform.service.ResourceOwnerService;
-import org.meldtech.platform.service.UserSignUpService;
 import org.meldtech.platform.service.token.TokenService;
 import org.meldtech.platform.util.LoggerHelper;
 import org.springframework.stereotype.Service;
@@ -30,21 +26,24 @@ public class UserSignInHandler {
 
     public Mono<ServerResponse> getAuthorizeEndpoint(ServerRequest request)  {
         log.info("Get Authorization code url requested ",  getClientIp(request));
-        return buildServerResponseNoBody(resourceOwnerService.requestAuthorizedUrl(getClientIp(request)));
+        String appId = request.pathVariable("appId");
+        return buildServerResponseNoBody(resourceOwnerService.requestAuthorizedUrl(getClientIp(request), appId));
     }
 
     public Mono<ServerResponse> requestAccessToken(ServerRequest request)  {
         String code = request.pathVariable("code");
+        String appId = request.pathVariable("appId");
         log.info("Providing code for access token  Requested", request.headers().firstHeader(X_FORWARD_FOR));
-        return buildServerResponse(tokenService.exchangeWithAccessToken(code, getClientIp(request)));
+        return buildServerResponse(tokenService.exchangeWithAccessToken(code, getClientIp(request), appId));
     }
 
     public Mono<ServerResponse> logout(ServerRequest request)  {
         String clientIp = request.remoteAddress()
                 .orElse(new InetSocketAddress("unknown", 0))
                 .getHostString();
+        String appId = request.queryParam("appId").orElse("unknown");
         log.info("Logout from app Requested", request.headers().firstHeader(X_FORWARD_FOR), " ", getClientIp(request));
-        return buildServerResponseNoBody(resourceOwnerService.requestLogoutEndpoint());
+        return buildServerResponseNoBody(resourceOwnerService.requestLogoutEndpoint(appId));
     }
 
 

@@ -347,20 +347,23 @@ public class WebConfigs {
             @RouterOperation(path = AUTHORIZE_URL, produces = { MediaType.APPLICATION_JSON_VALUE },
                     method = RequestMethod.GET, beanClass = UserSignInHandler.class, beanMethod = "getAuthorizeEndpoint",
                     operation = @Operation( operationId = "getAuthorizeEndpoint", tags = "Authentication API",
-                            description = "Request for Login Authorizer url", summary = "Request for Login Authorizer url"
+                            description = "Request for Login Authorizer url", summary = "Request for Login Authorizer url",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "appId", required = true)}
                     )
             ),
             @RouterOperation(path = AUTHORIZATION_CODE_URL, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.POST, beanClass = UserSignInHandler.class, beanMethod = "requestAccessToken",
                     operation = @Operation(operationId = "requestAccessToken", tags = "Authentication API",
                             description = "Get Access Token", summary = "Get Access Token",
-                            parameters = { @Parameter(in = ParameterIn.PATH, name = "code", required = true)}
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "code", required = true),
+                                    @Parameter(in = ParameterIn.PATH, name = "appId", required = true)}
                     )
             ),
             @RouterOperation(path = LOGOUT_URL, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserSignInHandler.class, beanMethod = "logout",
                     operation = @Operation(operationId = "logout", tags = "Authentication API",
-                            description = "Sign out from app", summary = "Sign out from app"
+                            description = "Sign out from app", summary = "Sign out from app",
+                            parameters = { @Parameter(in = ParameterIn.QUERY, name = "appId", required = true)}
                     )
             ),
     })
