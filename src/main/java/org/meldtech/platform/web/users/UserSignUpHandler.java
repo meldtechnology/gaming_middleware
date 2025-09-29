@@ -91,6 +91,12 @@ public class UserSignUpHandler {
         return buildServerResponse(userSignUpService.resendOtp(username.trim(), email.trim(), otpTemplate));
     }
 
+    public Mono<ServerResponse> sendOtp(ServerRequest request)  {
+        String email = request.pathVariable("email");
+        log.info("Send OTP Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(userSignUpService.sendOtp(email.trim(), otpTemplate));
+    }
+
     public Mono<ServerResponse> verifyOtp(ServerRequest request)  {
         String otp = request.pathVariable("otp");
         log.info("Verify user OTP Requested", request.headers().firstHeader(X_FORWARD_FOR));

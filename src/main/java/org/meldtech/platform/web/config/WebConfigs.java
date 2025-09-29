@@ -251,6 +251,13 @@ public class WebConfigs {
                                      @Parameter(in = ParameterIn.QUERY, name = "username"),
                     })
             ),
+            @RouterOperation(path = USER_SEND_OTP, produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = RequestMethod.GET, beanClass = UserSignUpHandler.class, beanMethod = "sendOtp",
+                    operation = @Operation( operationId = "sendOtp", tags = "User Account API",
+                            description = "Send Otp", summary = "Send Otp",
+                             parameters = { @Parameter(in = ParameterIn.PATH, name = "email", required = true),
+                    })
+            ),
             @RouterOperation(path = USER_REQUEST_CHANGE_PASSWORD, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserSignUpHandler.class, beanMethod = "resetUserPassword",
                     operation = @Operation(operationId = "resetUserPassword", tags = "User Account API",
@@ -325,6 +332,7 @@ public class WebConfigs {
     public RouterFunction<ServerResponse> userEndpointHandler(UserSignUpHandler handler) {
         return route()
                 .GET(USER_RESEND_OTP, accept(MediaType.APPLICATION_JSON), handler::resendOtp)
+                .POST(USER_SEND_OTP, accept(MediaType.APPLICATION_JSON), handler::sendOtp)
                 .GET(USER_REQUEST_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON), handler::resetUserPassword)
                 .POST(USER_SIGN_UP, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::addNewUser)
