@@ -252,7 +252,7 @@ public class WebConfigs {
                     })
             ),
             @RouterOperation(path = USER_SEND_OTP, produces = { MediaType.APPLICATION_JSON_VALUE },
-                    method = RequestMethod.GET, beanClass = UserSignUpHandler.class, beanMethod = "sendOtp",
+                    method = RequestMethod.POST, beanClass = UserSignUpHandler.class, beanMethod = "sendOtp",
                     operation = @Operation( operationId = "sendOtp", tags = "User Account API",
                             description = "Send Otp", summary = "Send Otp",
                              parameters = { @Parameter(in = ParameterIn.PATH, name = "email", required = true),
