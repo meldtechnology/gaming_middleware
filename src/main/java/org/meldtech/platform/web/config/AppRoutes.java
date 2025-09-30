@@ -32,6 +32,7 @@ public interface AppRoutes {
         String USER_VERIFY_OTP = USER_BASE + "/verify/otp/{otp}";
         String USER_REQUEST_CHANGE_PASSWORD = USER_BASE + "/public/{email}/password/reset";
         String USER_CHANGE_PASSWORD = USER_BASE + "/password";
+        String USER_CHANGE_PASSWORD_PUBLIC_ID = USER_BASE + "/public/password/publicId/{publicId}";
         String USER_CHANGE_PASSWORD_PUBLIC = USER_BASE + "/public/password/{otp}";
 
     }

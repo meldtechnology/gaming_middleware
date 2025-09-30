@@ -299,6 +299,15 @@ public class WebConfigs {
                             @Schema( implementation = PasswordRestRecord.class)))
                     )
             ),
+            @RouterOperation(path = USER_CHANGE_PASSWORD_PUBLIC_ID, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "changePasswordPublicById",
+                    operation = @Operation(operationId = "changePasswordPublicById", tags = "User Account API",
+                            description = "Change User Password by Id", summary = "Change User Password by Id",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "publicId", required = true)},
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = PasswordRestRecord.class)))
+                    )
+            ),
             @RouterOperation(path = USER_VERIFY_OTP, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "verifyOtp",
                     operation = @Operation(operationId = "verifyOtp", tags = "User Account API",
@@ -342,6 +351,8 @@ public class WebConfigs {
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordByAdmin)
                 .PUT(USER_CHANGE_PASSWORD_PUBLIC, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublic)
+                .PUT(USER_CHANGE_PASSWORD_PUBLIC_ID, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublicById)
                 .PUT(USER_ENABLE, accept(MediaType.APPLICATION_JSON), handler::reEnableUser)
                 .PUT(USER_VERIFY_OTP, accept(MediaType.APPLICATION_JSON), handler::verifyOtp)
                 .PUT(USER_DISABLE, accept(MediaType.APPLICATION_JSON), handler::disableUser)

@@ -61,6 +61,16 @@ public class UserSignUpHandler {
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
+    public Mono<ServerResponse> changePasswordPublicById(ServerRequest request)  {
+        Mono<PasswordRestRecord> passwordRecordMono = request.bodyToMono(PasswordRestRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        String publicId = request.pathVariable("publicId");
+        log.info("User change user password Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        return  passwordRecordMono.map(passwordRestRecord ->
+                        userSignUpService.changePassword(publicId, passwordRestRecord))
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
     public Mono<ServerResponse> changePassword(ServerRequest request)  {
         Mono<PasswordRestRecord> passwordRecordMono = request.bodyToMono(PasswordRestRecord.class)
                 .doOnNext(customValidator::validateEntries);
