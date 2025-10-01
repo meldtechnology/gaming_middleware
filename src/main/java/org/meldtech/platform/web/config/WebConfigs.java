@@ -273,6 +273,14 @@ public class WebConfigs {
                             @Schema( implementation = UserRecord.class)))
                     )
             ),
+            @RouterOperation(path = USER_SIGN_UP_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.POST, beanClass = UserSignUpHandler.class, beanMethod = "addNewUserPublic",
+                    operation = @Operation(operationId = "addNewUserPublic", tags = "User Account API",
+                            description = "Add a New User Account From Public", summary = "Add a New User Account From Public",
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = UserRecord.class)))
+                    )
+            ),
             @RouterOperation(path = USER_CHANGE_PASSWORD, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "changePassword",
                     operation = @Operation(operationId = "changePassword", tags = "User Account API",
@@ -345,6 +353,8 @@ public class WebConfigs {
                 .GET(USER_REQUEST_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON), handler::resetUserPassword)
                 .POST(USER_SIGN_UP, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::addNewUser)
+                .POST(USER_SIGN_UP_PUBLIC, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::addNewUserPublic)
                 .PUT(USER_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePassword)
                 .PUT(USER_CHANGE_PASSWORD_BY_ADMIN, accept(MediaType.APPLICATION_JSON)

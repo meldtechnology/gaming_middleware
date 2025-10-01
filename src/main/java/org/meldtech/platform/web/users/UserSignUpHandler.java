@@ -45,6 +45,15 @@ public class UserSignUpHandler {
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
+    public Mono<ServerResponse> addNewUserPublic(ServerRequest request)  {
+        Mono<UserRecord> profileRecordMono = request.bodyToMono(UserRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        log.info("Signing up new user Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        return profileRecordMono
+                .map(userSignUpService::createUser)
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
     public Mono<ServerResponse> resetUserPassword(ServerRequest request)  {
         String email = request.pathVariable("email");
         log.info("Reset user password (public) Requested", request.headers().firstHeader(X_FORWARD_FOR));
