@@ -10,6 +10,7 @@ import org.meldtech.platform.model.api.response.FullUserProfileRecord;
 import org.meldtech.platform.service.OAuth2RegisteredClientService;
 import org.meldtech.platform.service.UserPermissionService;
 import org.meldtech.platform.service.UserProfileService;
+import org.meldtech.platform.service.crypto.HmacUtil;
 import org.meldtech.platform.util.LoggerHelper;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -89,13 +90,26 @@ public class UserProfileHandler {
     public Mono<ServerResponse> changeUserRole(ServerRequest request)  {
         String userPublicId = request.pathVariable("publicId");
         String role = request.pathVariable("role");
-        log.info("Get user Metrics By Admin Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        log.info("Change user Role By Admin Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return buildServerResponse(userProfileService.changePermission(userPublicId, role));
     }
 
     public Mono<ServerResponse> getUserMetric(ServerRequest request)  {
         log.info("Get user Metrics By Admin Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return buildServerResponse(userProfileService.getUserMetrics());
+    }
+
+    public Mono<ServerResponse> changeUserRolePublic(ServerRequest request)  {
+        String userPublicId = request.pathVariable("publicId");
+        String hash = request.headers().firstHeader("hash");
+        String salt = request.headers().firstHeader("salt");
+        String timestampHeader = request.headers().firstHeader("X-Timestamp");
+        log.info("Get user role Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return Mono.justOrEmpty(HmacUtil.validateTimestamp(timestampHeader))
+                .flatMap(ok ->
+                    ok ? buildServerResponse(userProfileService.changeRole(userPublicId, hash, salt)) :
+                            ServerResponse.badRequest().bodyValue("Invalid timestamp")
+                );
     }
 
     private Mono<ServerResponse> getOrSearchProfiles(ServerRequest request) {

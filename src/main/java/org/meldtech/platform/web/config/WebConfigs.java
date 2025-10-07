@@ -191,6 +191,17 @@ public class WebConfigs {
                             @Parameter(in = ParameterIn.PATH, name = "role")
                     })
             ),
+            @RouterOperation(path = CHANGE_USER_ROLE_BY_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "changeUserRolePublic",
+                    operation = @Operation(operationId = "changeUserRolePublic", tags = "User Profiles API",
+                            description = "Update User Role", summary = "Update User Role",
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "publicId"),
+                                    @Parameter(in = ParameterIn.HEADER, name = "hash", required = true),
+                                    @Parameter(in = ParameterIn.HEADER, name = "salt", required = true),
+                                    @Parameter(in = ParameterIn.HEADER, name = "X-Timestamp", required = true)
+                            })
+            ),
             @RouterOperation(path = USER_PROFILE_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserMetric",
                     operation = @Operation(operationId = "getUserMetric", tags = "User Profiles API",
@@ -210,6 +221,7 @@ public class WebConfigs {
                 .PUT(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfileByAdmin)
                 .PUT(CHANGE_USER_ROLE_BY_ADMIN, accept(MediaType.APPLICATION_JSON), handler::changeUserRole)
+                .PUT(CHANGE_USER_ROLE_BY_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::changeUserRolePublic)
                 .build();
     }
 
@@ -362,6 +374,7 @@ public class WebConfigs {
                 .PUT(USER_CHANGE_PASSWORD_PUBLIC, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublic)
                 .PUT(USER_CHANGE_PASSWORD_PUBLIC_ID, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublicById).PUT(USER_CHANGE_PASSWORD_PUBLIC_ID, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublicById)
                 .PUT(USER_ENABLE, accept(MediaType.APPLICATION_JSON), handler::reEnableUser)
                 .PUT(USER_VERIFY_OTP, accept(MediaType.APPLICATION_JSON), handler::verifyOtp)
