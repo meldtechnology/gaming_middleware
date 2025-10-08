@@ -28,7 +28,7 @@ public interface AppRoutes {
         String ENTITY_METRICS = USER_PROFILE_BASE + "/entity/metrics";
 
         String USER_SIGN_UP_PUBLIC = USER_BASE + "/public/sign-up";
-        String CHANGE_USER_ROLE_BY_PUBLIC = USER_BASE + "/public/role/{publicId}";
+        String CHANGE_USER_ROLE_BY_PUBLIC = USER_BASE + "/role/change";
         String USER_SEND_OTP = USER_BASE + "/public/email/{email}/send/otp";
         String USER_RESEND_OTP = USER_BASE + "/public/{email}/send/otp";
         String USER_VERIFY_OTP = USER_BASE + "/verify/otp/{otp}";

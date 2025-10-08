@@ -100,16 +100,16 @@ public class UserProfileHandler {
     }
 
     public Mono<ServerResponse> changeUserRolePublic(ServerRequest request)  {
-        String userPublicId = request.pathVariable("publicId");
+        Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
         String hash = request.headers().firstHeader("hash");
         String salt = request.headers().firstHeader("salt");
         String timestampHeader = request.headers().firstHeader("X-Timestamp");
         log.info("Get user role Requested ", request.headers().firstHeader(X_FORWARD_FOR));
-        return Mono.justOrEmpty(HmacUtil.validateTimestamp(timestampHeader))
-                .flatMap(ok ->
-                    ok ? buildServerResponse(userProfileService.changeRole(userPublicId, hash, salt)) :
-                            ServerResponse.badRequest().bodyValue("Invalid timestamp")
-                );
+        return jwtAuthToken
+                .map(ApiResponse::getPublicIdFromToken)
+                .flatMap(publicId -> HmacUtil.validateTimestamp(timestampHeader) ?
+                        buildServerResponse(userProfileService.changeRole(publicId, hash, salt)) :
+                        ServerResponse.badRequest().bodyValue("Invalid timestamp"));
     }
 
     private Mono<ServerResponse> getOrSearchProfiles(ServerRequest request) {

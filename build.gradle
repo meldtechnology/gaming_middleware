@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.meld-tech.platform'
-version = '2025.10.9'
+version = '2025.10.9_1'
 
 java {
     toolchain {

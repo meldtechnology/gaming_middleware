@@ -196,7 +196,6 @@ public class WebConfigs {
                     operation = @Operation(operationId = "changeUserRolePublic", tags = "User Profiles API",
                             description = "Update User Role", summary = "Update User Role",
                             parameters = {
-                                    @Parameter(in = ParameterIn.PATH, name = "publicId"),
                                     @Parameter(in = ParameterIn.HEADER, name = "hash", required = true),
                                     @Parameter(in = ParameterIn.HEADER, name = "salt", required = true),
                                     @Parameter(in = ParameterIn.HEADER, name = "X-Timestamp", required = true)
