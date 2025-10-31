@@ -45,6 +45,15 @@ public class UserSignUpHandler {
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
+    public Mono<ServerResponse> addNewUserPublic(ServerRequest request)  {
+        Mono<UserRecord> profileRecordMono = request.bodyToMono(UserRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        log.info("Signing up new user Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        return profileRecordMono
+                .map(userSignUpService::createUser)
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
     public Mono<ServerResponse> resetUserPassword(ServerRequest request)  {
         String email = request.pathVariable("email");
         log.info("Reset user password (public) Requested", request.headers().firstHeader(X_FORWARD_FOR));
@@ -58,6 +67,16 @@ public class UserSignUpHandler {
         log.info("Change user password public Requested ", request.headers().firstHeader(X_FORWARD_FOR));
         return passwordRecordMono.map(passwordRestRecord ->
                         userSignUpService.verifyPasswordResetOtp(otp, passwordRestRecord))
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> changePasswordPublicById(ServerRequest request)  {
+        Mono<PasswordRestRecord> passwordRecordMono = request.bodyToMono(PasswordRestRecord.class)
+                .doOnNext(customValidator::validateEntries);
+        String publicId = request.pathVariable("publicId");
+        log.info("User change user password Requested", request.headers().firstHeader(X_FORWARD_FOR));
+        return  passwordRecordMono.map(passwordRestRecord ->
+                        userSignUpService.changePassword(publicId, passwordRestRecord))
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
@@ -89,6 +108,12 @@ public class UserSignUpHandler {
         String username = request.queryParam("username").orElse(email);
         log.info("Resend OTP Requested ", request.headers().firstHeader(X_FORWARD_FOR), username);
         return buildServerResponse(userSignUpService.resendOtp(username.trim(), email.trim(), otpTemplate));
+    }
+
+    public Mono<ServerResponse> sendOtp(ServerRequest request)  {
+        String email = request.pathVariable("email");
+        log.info("Send OTP Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(userSignUpService.sendOtp(email.trim(), otpTemplate));
     }
 
     public Mono<ServerResponse> verifyOtp(ServerRequest request)  {

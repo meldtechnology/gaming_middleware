@@ -27,10 +27,14 @@ public interface AppRoutes {
         String ENTITY_VERIFY = USER_BASE + "/verify/identity";
         String ENTITY_METRICS = USER_PROFILE_BASE + "/entity/metrics";
 
+        String USER_SIGN_UP_PUBLIC = USER_BASE + "/public/sign-up";
+        String CHANGE_USER_ROLE_BY_PUBLIC = USER_BASE + "/role/change";
+        String USER_SEND_OTP = USER_BASE + "/public/email/{email}/send/otp";
         String USER_RESEND_OTP = USER_BASE + "/public/{email}/send/otp";
         String USER_VERIFY_OTP = USER_BASE + "/verify/otp/{otp}";
         String USER_REQUEST_CHANGE_PASSWORD = USER_BASE + "/public/{email}/password/reset";
         String USER_CHANGE_PASSWORD = USER_BASE + "/password";
+        String USER_CHANGE_PASSWORD_PUBLIC_ID = USER_BASE + "/public/password/publicId/{publicId}";
         String USER_CHANGE_PASSWORD_PUBLIC = USER_BASE + "/public/password/{otp}";
 
     }
@@ -98,8 +102,8 @@ public interface AppRoutes {
 
     interface Authentication {
         String BASE_AUTH = API_V1_URL + "/auth/users";
-        String AUTHORIZE_URL = BASE_AUTH + "/authorize/endpoint";
-        String AUTHORIZATION_CODE_URL = BASE_AUTH + "/token/endpoint/{code}";
+        String AUTHORIZE_URL = BASE_AUTH + "/authorize/endpoint/{appId}";
+        String AUTHORIZATION_CODE_URL = BASE_AUTH + "/token/endpoint/{appId}/{code}";
         String LOGOUT_URL = BASE_AUTH + "/logout/endpoint";
     }
 }

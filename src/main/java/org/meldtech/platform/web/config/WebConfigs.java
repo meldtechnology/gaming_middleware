@@ -191,6 +191,16 @@ public class WebConfigs {
                             @Parameter(in = ParameterIn.PATH, name = "role")
                     })
             ),
+            @RouterOperation(path = CHANGE_USER_ROLE_BY_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "changeUserRolePublic",
+                    operation = @Operation(operationId = "changeUserRolePublic", tags = "User Profiles API",
+                            description = "Update User Role", summary = "Update User Role",
+                            parameters = {
+                                    @Parameter(in = ParameterIn.HEADER, name = "hash", required = true),
+                                    @Parameter(in = ParameterIn.HEADER, name = "salt", required = true),
+                                    @Parameter(in = ParameterIn.HEADER, name = "X-Timestamp", required = true)
+                            })
+            ),
             @RouterOperation(path = USER_PROFILE_METRIC, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserMetric",
                     operation = @Operation(operationId = "getUserMetric", tags = "User Profiles API",
@@ -210,6 +220,7 @@ public class WebConfigs {
                 .PUT(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfileByAdmin)
                 .PUT(CHANGE_USER_ROLE_BY_ADMIN, accept(MediaType.APPLICATION_JSON), handler::changeUserRole)
+                .PUT(CHANGE_USER_ROLE_BY_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::changeUserRolePublic)
                 .build();
     }
 
@@ -251,6 +262,13 @@ public class WebConfigs {
                                      @Parameter(in = ParameterIn.QUERY, name = "username"),
                     })
             ),
+            @RouterOperation(path = USER_SEND_OTP, produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = RequestMethod.POST, beanClass = UserSignUpHandler.class, beanMethod = "sendOtp",
+                    operation = @Operation( operationId = "sendOtp", tags = "User Account API",
+                            description = "Send Otp", summary = "Send Otp",
+                             parameters = { @Parameter(in = ParameterIn.PATH, name = "email", required = true),
+                    })
+            ),
             @RouterOperation(path = USER_REQUEST_CHANGE_PASSWORD, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserSignUpHandler.class, beanMethod = "resetUserPassword",
                     operation = @Operation(operationId = "resetUserPassword", tags = "User Account API",
@@ -262,6 +280,14 @@ public class WebConfigs {
                     method = RequestMethod.POST, beanClass = UserSignUpHandler.class, beanMethod = "addNewUser",
                     operation = @Operation(operationId = "addNewUser", tags = "User Account API",
                             description = "Add a New User Account", summary = "Add a New User Account",
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = UserRecord.class)))
+                    )
+            ),
+            @RouterOperation(path = USER_SIGN_UP_PUBLIC, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.POST, beanClass = UserSignUpHandler.class, beanMethod = "addNewUserPublic",
+                    operation = @Operation(operationId = "addNewUserPublic", tags = "User Account API",
+                            description = "Add a New User Account From Public", summary = "Add a New User Account From Public",
                             requestBody = @RequestBody(content = @Content(schema =
                             @Schema( implementation = UserRecord.class)))
                     )
@@ -288,6 +314,15 @@ public class WebConfigs {
                     operation = @Operation(operationId = "changePasswordPublic", tags = "User Account API",
                             description = "Change User Password", summary = "Change User Password",
                             parameters = { @Parameter(in = ParameterIn.PATH, name = "otp", required = true)},
+                            requestBody = @RequestBody(content = @Content(schema =
+                            @Schema( implementation = PasswordRestRecord.class)))
+                    )
+            ),
+            @RouterOperation(path = USER_CHANGE_PASSWORD_PUBLIC_ID, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserSignUpHandler.class, beanMethod = "changePasswordPublicById",
+                    operation = @Operation(operationId = "changePasswordPublicById", tags = "User Account API",
+                            description = "Change User Password by Id", summary = "Change User Password by Id",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "publicId", required = true)},
                             requestBody = @RequestBody(content = @Content(schema =
                             @Schema( implementation = PasswordRestRecord.class)))
                     )
@@ -325,15 +360,21 @@ public class WebConfigs {
     public RouterFunction<ServerResponse> userEndpointHandler(UserSignUpHandler handler) {
         return route()
                 .GET(USER_RESEND_OTP, accept(MediaType.APPLICATION_JSON), handler::resendOtp)
+                .POST(USER_SEND_OTP, accept(MediaType.APPLICATION_JSON), handler::sendOtp)
                 .GET(USER_REQUEST_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON), handler::resetUserPassword)
                 .POST(USER_SIGN_UP, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::addNewUser)
+                .POST(USER_SIGN_UP_PUBLIC, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::addNewUserPublic)
                 .PUT(USER_CHANGE_PASSWORD, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePassword)
                 .PUT(USER_CHANGE_PASSWORD_BY_ADMIN, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordByAdmin)
                 .PUT(USER_CHANGE_PASSWORD_PUBLIC, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublic)
+                .PUT(USER_CHANGE_PASSWORD_PUBLIC_ID, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublicById).PUT(USER_CHANGE_PASSWORD_PUBLIC_ID, accept(MediaType.APPLICATION_JSON)
+                        .and(contentType(MediaType.APPLICATION_JSON)), handler::changePasswordPublicById)
                 .PUT(USER_ENABLE, accept(MediaType.APPLICATION_JSON), handler::reEnableUser)
                 .PUT(USER_VERIFY_OTP, accept(MediaType.APPLICATION_JSON), handler::verifyOtp)
                 .PUT(USER_DISABLE, accept(MediaType.APPLICATION_JSON), handler::disableUser)
@@ -347,20 +388,23 @@ public class WebConfigs {
             @RouterOperation(path = AUTHORIZE_URL, produces = { MediaType.APPLICATION_JSON_VALUE },
                     method = RequestMethod.GET, beanClass = UserSignInHandler.class, beanMethod = "getAuthorizeEndpoint",
                     operation = @Operation( operationId = "getAuthorizeEndpoint", tags = "Authentication API",
-                            description = "Request for Login Authorizer url", summary = "Request for Login Authorizer url"
+                            description = "Request for Login Authorizer url", summary = "Request for Login Authorizer url",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "appId", required = true)}
                     )
             ),
             @RouterOperation(path = AUTHORIZATION_CODE_URL, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.POST, beanClass = UserSignInHandler.class, beanMethod = "requestAccessToken",
                     operation = @Operation(operationId = "requestAccessToken", tags = "Authentication API",
                             description = "Get Access Token", summary = "Get Access Token",
-                            parameters = { @Parameter(in = ParameterIn.PATH, name = "code", required = true)}
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "code", required = true),
+                                    @Parameter(in = ParameterIn.PATH, name = "appId", required = true)}
                     )
             ),
             @RouterOperation(path = LOGOUT_URL, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserSignInHandler.class, beanMethod = "logout",
                     operation = @Operation(operationId = "logout", tags = "Authentication API",
-                            description = "Sign out from app", summary = "Sign out from app"
+                            description = "Sign out from app", summary = "Sign out from app",
+                            parameters = { @Parameter(in = ParameterIn.QUERY, name = "appId", required = true)}
                     )
             ),
     })

@@ -41,7 +41,7 @@ public class AuthorizerHandler {
 
     public Mono<ServerResponse> getClientById(ServerRequest request)  {
         String clientId = request.pathVariable("clientId");
-        log.info("[{}] Get Client {} Requested", request.headers().firstHeader(X_FORWARD_FOR), clientId);
+        log.info("Get Client Requested ", request.headers().firstHeader(X_FORWARD_FOR), " ", clientId);
         if(disabled) return endpointDisabled();
         return buildServerResponse(clientService.getClients(clientId));
     }
