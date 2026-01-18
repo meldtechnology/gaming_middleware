@@ -2,6 +2,7 @@ package org.meldtech.platform.web.config;
 
 public interface AppRoutes {
     String API_V1_URL = "/v1";
+    String API_V2_URL = "/v2";
 
     interface Client {
         String CLIENT_BASE = API_V1_URL + "/oauth2/clients";
@@ -92,11 +93,15 @@ public interface AppRoutes {
 
     interface Reporting {
         String REPORT_BASE = API_V1_URL + "/reports";
+        String REPORT_BASE_V2 = API_V2_URL + "/reports";
         String DATE_RANGE = REPORT_BASE + "/date-range";
+        String DATE_RANGE_V2 = REPORT_BASE_V2 + "/date-range";
         String APPLICATION_REPORT = DATE_RANGE + "/applications";
+        String APPLICATION_REPORT_V2 = DATE_RANGE_V2 + "/applications";
         String PAYMENT_REPORT = DATE_RANGE + "/payments";
         String APPLICATION_FILTER_REPORT = APPLICATION_REPORT + "/filter";
         String DATE_RANGE_PAYMENT = APPLICATION_REPORT + "/payment";
+        String DATE_RANGE_PAYMENT_V2 = APPLICATION_REPORT_V2 + "/payment";
         String PAYMENT_FILTER_REPORT = PAYMENT_REPORT + "/status";
     }
 
@@ -104,6 +109,7 @@ public interface AppRoutes {
         String BASE_AUTH = API_V1_URL + "/auth/users";
         String AUTHORIZE_URL = BASE_AUTH + "/authorize/endpoint/{appId}";
         String AUTHORIZATION_CODE_URL = BASE_AUTH + "/token/endpoint/{appId}/{code}";
+        String REFRESH_TOKEN_URL = BASE_AUTH + "/token/renewal/endpoint/{appId}/{refreshToken}";
         String LOGOUT_URL = BASE_AUTH + "/logout/endpoint";
     }
 }

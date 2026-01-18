@@ -88,12 +88,27 @@ public class WebReportConfig {
                                     @Parameter(in = ParameterIn.QUERY, name = "status", required = true, example = "PENDING")
                     })
             ),
+            @RouterOperation(path = DATE_RANGE_PAYMENT_V2, produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE},
+                    method = RequestMethod.POST, beanClass = ReportHandler.class, beanMethod = "appPaymentReportWithDateRangeAndFilter",
+                    operation = @Operation(operationId = "appPaymentReportWithDateRangeAndFilter", tags = "Report Management API",
+                            description = "Get Application Report by Date Range and Payment Status Version 2",
+                            summary = "Get Application Report by Date Range and Payment status",
+                            parameters = {
+                                    @Parameter(in = ParameterIn.QUERY, name = "reportType", example = "PDF"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "from", required = true),
+                                    @Parameter(in = ParameterIn.QUERY, name = "to", required = true),
+                                    @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "sortIn", example = "DESC"),
+                                    @Parameter(in = ParameterIn.QUERY, name = "status", required = true, example = "PENDING")
+                            })
+            ),
     })
     public RouterFunction<ServerResponse> reportEndpointHandler(ReportHandler handler) {
         return route()
                 .POST(APPLICATION_REPORT, accept(MediaType.APPLICATION_OCTET_STREAM), handler::appWithDateRange)
                 .POST(APPLICATION_FILTER_REPORT, accept(MediaType.APPLICATION_OCTET_STREAM), handler::appWithDateRangeFilter)
                 .POST(DATE_RANGE_PAYMENT, accept(MediaType.APPLICATION_OCTET_STREAM), handler::appWithDateRangeAndPaymentFilter)
+                .POST(DATE_RANGE_PAYMENT_V2, accept(MediaType.APPLICATION_OCTET_STREAM), handler::appPaymentReportWithDateRangeAndFilter)
                 .POST(PAYMENT_REPORT, accept(MediaType.APPLICATION_OCTET_STREAM), handler::paymentWithDateRange)
                 .POST(PAYMENT_FILTER_REPORT, accept(MediaType.APPLICATION_OCTET_STREAM), handler::paymentWithDateRangeAndPaymentFilter)
                 .build();

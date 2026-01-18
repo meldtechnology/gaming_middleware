@@ -37,6 +37,13 @@ public class UserSignInHandler {
         return buildServerResponse(tokenService.exchangeWithAccessToken(code, getClientIp(request), appId));
     }
 
+    public Mono<ServerResponse> refreshAccessToken(ServerRequest request)  {
+        String token = request.pathVariable("refreshToken");
+        String appId = request.pathVariable("appId");
+        log.info("Providing refresh token for access token renewal", request.headers().firstHeader(X_FORWARD_FOR));
+        return buildServerResponse(tokenService.reNewAccessToken(token, appId));
+    }
+
     public Mono<ServerResponse> logout(ServerRequest request)  {
         String clientIp = request.remoteAddress()
                 .orElse(new InetSocketAddress("unknown", 0))
