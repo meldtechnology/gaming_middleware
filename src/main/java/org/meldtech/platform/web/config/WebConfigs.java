@@ -400,6 +400,14 @@ public class WebConfigs {
                                     @Parameter(in = ParameterIn.PATH, name = "appId", required = true)}
                     )
             ),
+            @RouterOperation(path = REFRESH_TOKEN_URL, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.POST, beanClass = UserSignInHandler.class, beanMethod = "refreshAccessToken",
+                    operation = @Operation(operationId = "refreshAccessToken", tags = "Authentication API",
+                            description = "Renew Access Token", summary = "Renew Access Token",
+                            parameters = { @Parameter(in = ParameterIn.PATH, name = "refreshToken", required = true),
+                                    @Parameter(in = ParameterIn.PATH, name = "appId", required = true)}
+                    )
+            ),
             @RouterOperation(path = LOGOUT_URL, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserSignInHandler.class, beanMethod = "logout",
                     operation = @Operation(operationId = "logout", tags = "Authentication API",
@@ -412,6 +420,7 @@ public class WebConfigs {
         return route()
                 .GET(AUTHORIZE_URL, accept(MediaType.APPLICATION_JSON), handler::getAuthorizeEndpoint)
                 .POST(AUTHORIZATION_CODE_URL, accept(MediaType.APPLICATION_JSON), handler::requestAccessToken)
+                .POST(REFRESH_TOKEN_URL, accept(MediaType.APPLICATION_JSON), handler::refreshAccessToken)
                 .GET(LOGOUT_URL, accept(MediaType.APPLICATION_JSON), handler::logout)
                 .build();
     }

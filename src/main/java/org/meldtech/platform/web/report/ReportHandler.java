@@ -12,6 +12,8 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
+
 import static org.meldtech.platform.helper.RequestBodyHelper.getReportSetting;
 import static org.meldtech.platform.helper.RequestBodyHelper.paramList;
 
@@ -65,6 +67,19 @@ public class ReportHandler {
         log.info("Generate payment with date range & Payment Filter Report Requested from ",
                 request.headers().firstHeader(X_FORWARD_FOR));
         return transactionService.getPaymentReportByDateRangeAndStatus(getReportSetting(request), status)
+                .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
+                .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
+    }
+
+    public Mono<ServerResponse> appPaymentReportWithDateRangeAndFilter(ServerRequest request)  {
+        String reportType = request.queryParam("reportType").orElse("PDF");
+        String status = request.queryParams().getFirst("status");
+        log.info("Generate Document and payment with date range & Payment Filter Report Requested from ",
+                request.headers().firstHeader(X_FORWARD_FOR));
+        return  applicantDocumentService.fetchApplicationReportByDateRangeAndPaymentStatus(getReportSetting(request), status)
+                        .flatMap(transactionService::getPaymentReport)
+                .collectList()
+                .flatMap(applicantDocumentService::buildApplicationPaymentStatusReport)
                 .map(reportInfo -> downloadGeneratorService.generateReport(reportInfo, reportTpe(reportType)))
                 .flatMap(streamApp ->  ApiResponse.buildServerResponseStreamBody(streamApp, reportTpe(reportType)));
     }
