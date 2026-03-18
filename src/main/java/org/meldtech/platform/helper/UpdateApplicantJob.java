@@ -22,7 +22,7 @@ public class UpdateApplicantJob {
     private final UserProfileService userProfileService;
     private final ObjectMapper objectMapper;
 
-    private boolean isExecuted = false;
+    private boolean isExecuted = true;
 
     // Runs once 5 seconds after startup
     @Scheduled(initialDelay = 5000, fixedDelay = Long.MAX_VALUE)
