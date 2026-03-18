@@ -149,6 +149,21 @@ public class WebConfigs {
                             @Parameter(in = ParameterIn.QUERY, name = "search")
                     })
             ),
+            @RouterOperation(path = USER_PROFILE_V2_ADMIN_BASE, produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getV2Profiles",
+                    operation = @Operation( operationId = "getV2Profiles", tags = "User Profiles API",
+                            description = "Get Users Profiles", summary = "Get Users Profiles",
+                             parameters = {
+                            @Parameter(in = ParameterIn.QUERY, name = "page", required = true, example = "1"),
+                            @Parameter(in = ParameterIn.QUERY, name = "size", required = true, example = "10"),
+                            @Parameter(in = ParameterIn.QUERY, name = "sortBy"),
+                            @Parameter(in = ParameterIn.QUERY, name = "sortIn", example = "ASC"),
+                            @Parameter(in = ParameterIn.QUERY, name = "start"),
+                            @Parameter(in = ParameterIn.QUERY, name = "end"),
+                            @Parameter(in = ParameterIn.QUERY, name = "applicationId"),
+                            @Parameter(in = ParameterIn.QUERY, name = "tenantId"),
+                    })
+            ),
             @RouterOperation(path = USER_PROFILE_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
                     method = RequestMethod.GET, beanClass = UserProfileHandler.class, beanMethod = "getUserProfile",
                     operation = @Operation(operationId = "getUserProfile", tags = "User Profiles API",
@@ -171,6 +186,13 @@ public class WebConfigs {
                             description = "Update User Profile Details", summary = "Update User Profile Details",
                             requestBody = @RequestBody(content = @Content(schema =
                             @Schema( implementation = FullUserProfileRecord.class)))
+                    )
+            ),
+            @RouterOperation(path = USER_PROFILE_TENANT_BY_ID, produces = { MediaType.APPLICATION_JSON_VALUE},
+                    method = RequestMethod.PUT, beanClass = UserProfileHandler.class, beanMethod = "updateUserTenant",
+                    operation = @Operation(operationId = "updateUserTenant", tags = "User Profiles API",
+                            description = "Update User Tenant", summary = "Update User Tenant",
+                            parameters = {@Parameter(in = ParameterIn.PATH, name = "tenantId")}
                     )
             ),
             @RouterOperation(path = EDIT_USER_PROFILE_ADMIN_BASE, produces = { MediaType.APPLICATION_JSON_VALUE},
@@ -211,6 +233,7 @@ public class WebConfigs {
     public RouterFunction<ServerResponse> profileEndpointHandler(UserProfileHandler handler) {
         return route()
                 .GET(USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON), handler::getProfiles)
+                .GET(USER_PROFILE_V2_ADMIN_BASE, accept(MediaType.APPLICATION_JSON), handler::getV2Profiles)
                 .GET(USER_PROFILE_BASE, accept(MediaType.APPLICATION_JSON), handler::getUserProfile)
                 .GET(USER_PERMISSION_BASE, accept(MediaType.APPLICATION_JSON), handler::getUserPermissions)
                 .GET(USER_PROFILE_BY_ID, accept(MediaType.APPLICATION_JSON), handler::getUserProfileByAdmin)
@@ -219,6 +242,7 @@ public class WebConfigs {
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfile)
                 .PUT(EDIT_USER_PROFILE_ADMIN_BASE, accept(MediaType.APPLICATION_JSON)
                         .and(contentType(MediaType.APPLICATION_JSON)), handler::editUserProfileByAdmin)
+                .PUT(USER_PROFILE_TENANT_BY_ID, accept(MediaType.APPLICATION_JSON), handler::updateUserTenant)
                 .PUT(CHANGE_USER_ROLE_BY_ADMIN, accept(MediaType.APPLICATION_JSON), handler::changeUserRole)
                 .PUT(CHANGE_USER_ROLE_BY_PUBLIC, accept(MediaType.APPLICATION_JSON), handler::changeUserRolePublic)
                 .build();

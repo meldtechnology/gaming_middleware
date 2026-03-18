@@ -9,6 +9,7 @@ import org.meldtech.platform.model.api.request.DocumentUpdateRequest;
 import org.meldtech.platform.model.enums.StatusType;
 import org.meldtech.platform.service.ApplicantDocumentService;
 import org.meldtech.platform.util.LoggerHelper;
+import org.springdoc.webflux.api.MultipleOpenApiWebFluxResource;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -27,6 +28,7 @@ public class ApplicationDocumentHandler {
     private final CustomValidator customValidator;
 
     private static final String X_FORWARD_FOR = "X-Forwarded-For";
+    private final MultipleOpenApiWebFluxResource multipleOpenApiResource;
 
     public Mono<ServerResponse> getApplications(ServerRequest request)  {
         log.info("Get application documents Requested from ", request.headers().firstHeader(X_FORWARD_FOR));
@@ -146,4 +148,26 @@ public class ApplicationDocumentHandler {
                 reportSettings(request))) :
                 buildServerResponse(documentService.getApplications(reportSettings(request)));
     }
+
+//    private Mono<DocumentUpdateRequest> reconstruct(Mono<JwtAuthenticationToken> token,
+//                                                    UserInfo userInfo,
+//                                                    StatusType statusType,
+//                                                    Mono<DocumentUpdateRequest> request) {
+//        return token
+//                .map(ApiResponse::getPublicIdFromToken)
+//                .flatMap(userProfileService::getUserProfile)
+//                .zipWith(request)
+//                .flatMap(tuple -> {
+//                    DocumentUpdateRequest docRequest = tuple.getT2();
+//                    AppResponse response = tuple.getT1();
+//                    return Mono.just(DocumentUpdateRequest.builder()
+//                                    .requesterId(docRequest.requesterId())
+//                                    .requester(docRequest.requester())
+//                                    .reference(docRequest.reference())
+//                                    .comment(docRequest.comment())
+//                                    .status(statusType.name())
+//                                    .userInfo(response.getData())
+//                            .build());
+//                } );
+//    }
 }

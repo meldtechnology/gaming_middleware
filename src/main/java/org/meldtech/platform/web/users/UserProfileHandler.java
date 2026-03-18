@@ -37,6 +37,13 @@ public class UserProfileHandler {
         return getOrSearchProfiles(request);
     }
 
+    public Mono<ServerResponse> getV2Profiles(ServerRequest request)  {
+        log.info("Get user profiles v2 Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        String applicationId = request.queryParam("applicationId").orElse(null);
+        String tenantId = request.queryParam("tenantId").orElse(null);
+        return buildServerResponse(userProfileService.getUserProfiles(reportSettings(request), applicationId, tenantId));
+    }
+
     public Mono<ServerResponse> getUserProfile(ServerRequest request)  {
         Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
         log.info("Get user profile Requested ", request.headers().firstHeader(X_FORWARD_FOR));
@@ -84,6 +91,16 @@ public class UserProfileHandler {
         return profileRecordMono
                         .map(userProfileRecord -> userProfileService.updateUserProfile(
                                 RequestBodyHelper.reconstruct(publicId, userProfileRecord), true))
+                .flatMap(ApiResponse::buildServerResponse);
+    }
+
+    public Mono<ServerResponse> updateUserTenant(ServerRequest request)  {
+        String tenantId = request.pathVariable("tenantId");
+        Mono<JwtAuthenticationToken> jwtAuthToken = AuthTokenConfig.authenticatedToken(request);
+        log.info("Update user tenant Requested ", request.headers().firstHeader(X_FORWARD_FOR));
+        return jwtAuthToken
+                .map(ApiResponse::getPublicIdFromToken)
+                .map(publicId -> userProfileService.updateUserProfile(publicId, tenantId) )
                 .flatMap(ApiResponse::buildServerResponse);
     }
 
