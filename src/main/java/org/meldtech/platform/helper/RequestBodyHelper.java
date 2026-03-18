@@ -33,7 +33,8 @@ public class RequestBodyHelper {
                 userInfo.username(),
                 userInfo.publicId(),
                 request.comment(),
-                type.name())
+                type.name(),
+                        null)
         );
     }
 
